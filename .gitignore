@@ -1,6 +1,10 @@
 # Virtual env
 .env
 
+# Build Directory => PyInstaller
+./build
+*.spec
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
