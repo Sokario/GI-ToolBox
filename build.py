@@ -1,2 +1,2 @@
-import subprocess
-subprocess.call(r"python -m PyInstaller --onefile ToolBox.pyw")
+import os
+os.system("python3 -m PyInstaller --onefile ToolBox.pyw")

@@ -2,7 +2,7 @@
 .env
 
 # Build Directory => PyInstaller
-./build
+build
 *.spec
 
 # Byte-compiled / optimized / DLL files
