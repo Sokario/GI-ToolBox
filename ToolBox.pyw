@@ -26,7 +26,12 @@ if __name__ == "__main__" :
     layout = [[sGUI.Text("ToolBox from PySimpleGUI")], [sGUI.Button("OK")], image_viewer]
 
     # Create the window
-    window = sGUI.Window("Genshin Impact ToolBox", layout, size = (720, 480))
+    if (sys.platform.startswith("win")):
+        window_icon = resource_path("icon.ico")
+    else:
+        window_icon = resource_path("icon.png")
+    window = sGUI.Window("Genshin Impact ToolBox", layout, icon = window_icon, titlebar_icon = window_icon, size = (720, 480), resizable = True, finalize = True)
+    #window.maximize()
 
     # Create an event loop
     while True:
