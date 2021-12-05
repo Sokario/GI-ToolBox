@@ -6,7 +6,8 @@ class BaseCharacter():
         self.level = 1
 
         self.baseStats = dict()
-        self.statIncreases = list() #Liste de dictionnaires taille max 90
+        #self.statIncreases = list() #Liste de dictionnaires taille max 90
+        self.statsAtLevel = dict() #dict de listes
 
         self.attackSpeed = 0
         self.chargedAttackSpeed = 0
@@ -25,39 +26,20 @@ class BaseCharacter():
 
         pass
 
-    def getStatsAtLevel(self, level):
+    def getStatAtLevel(self, level) -> dict:
         if level > 90:
             level = 90
         elif level < 1:
             level = 0
 
         ret = dict()
-        ret["hp"] = self.baseStats["hp"]
-        ret["atk"] = self.baseStats["atk"]
-        ret["def"] = self.baseStats["def"]
-        ret["crit rate"] = self.baseStats["crit rate"]
-        ret["crit dmg"] = self.baseStats["crit dmg"]
-
-        for i in range(1,level):
-            ret["hp"] += self.statIncreases[i-1]["hp"]
-            ret["atk"] += self.statIncreases[i-1]["atk"]
-            ret["def"] += self.statIncreases[i-1]["def"]
-            ret["crit rate"] += self.statIncreases[i-1]["crit rate"]
-            ret["crit dmg"] += self.statIncreases[i-1]["crit dmg"]
+        ret["hp"] = self.statsAtLevel["hp"][level-1]
+        ret["atk"] = self.statsAtLevel["atk"][level-1]
+        ret["def"] = self.statsAtLevel["def"][level-1]
+        ret["crit rate"] = self.statsAtLevel["crit rate"][level-1]
+        ret["crit dmg"] = self.statsAtLevel["crit dmg"][level-1]
 
         return ret
 
-    def getStats(self):
+    def getStats(self) -> dict:
         return self.getStatsAtLevel(self, self.level)
-
-    def set_statIncreases(self, hpIncreases, atkIncreases, defIncreases, critRateIncreases, critDmgIncreases):
-        self.statIncreases = [
-            {
-                "hp" : hpIncreases[i],
-                "atk" : atkIncreases[i],
-                "def" : defIncreases[i],
-                "crit rate" : critRateIncreases[i],
-                "crit dmg" : critDmgIncreases[i],
-            }
-            for i in range(89)
-        ]
