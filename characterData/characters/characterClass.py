@@ -1,4 +1,5 @@
 #from abc import abstractmethod
+from . import weapons.weaponClass
 
 class BaseCharacter():
     def __init__(self) :
@@ -6,6 +7,9 @@ class BaseCharacter():
 
         self.baseStats = dict()
         self.statIncreases = list() #Liste de dictionnaires taille max 90
+
+        self.attackSpeed = 0
+        self.chargedAttackSpeed = 0
         
         self.baseAbilities = dict() #champs : basicAttack; elementalAbility; elementalBurst
         self.abilityIncreases = list();
@@ -14,7 +18,7 @@ class BaseCharacter():
 
         self.constellation = list()
         self.artifacts = dict() #unused for now
-        self.weaponType = Weapon() #weapon instance
+        self.weaponType = BaseWeapon("none", "none") #weapon instance
 
         self.ascensionMaterials = list()
         self.abilityMaterials   = list()
