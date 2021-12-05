@@ -48,7 +48,7 @@ if __name__ == "__main__" :
         ]
     table =  [[sGUI.Button("", image_data = img_data(img_path, chara_baseSize), button_color=(sGUI.theme_background_color(), sGUI.theme_background_color()), border_width=0, key=(row,col)) for col in range(max_cols)] for row in range(max_rows)]
 
-    layout += [[sGUI.Table(table)]]
+    layout += table#[[sGUI.Table(table)]]
 
     chara_num = 45 + 1
 
