@@ -13,8 +13,6 @@ def resource_path(relative_path):
 
     return os.path.join(base_path, relative_path)
 
-sGUI.FileBrowse
-
 if __name__ == "__main__" :
     itto_img = resource_path("itto.png")
     print(itto_img)
