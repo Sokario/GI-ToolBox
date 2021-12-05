@@ -59,7 +59,7 @@ if __name__ == "__main__" :
         window_icon = resource_path("icon.png")
 
     # Create main Window
-    window = sGUI.Window("Genshin Impact ToolBox", layout, icon = window_icon, titlebar_icon = window_icon, size = window_size, resizable = True, finalize = True)   
+    window = sGUI.Window("Genshin Impact ToolBox", layout, icon = window_icon, titlebar_icon = window_icon, size = window_size, use_ttk_buttons=True, resizable = True)   
 
     # Create an event loop
     while True:
@@ -70,8 +70,6 @@ if __name__ == "__main__" :
         if (event == "EXIT" or event == sGUI.WIN_CLOSED):
             break
         elif (event == TIMEOUT_KEY):
-            #LayoutUpdate(window, chara_baseSize)
-            #ImageUpdate(window, img_path, chara_baseSize)
             pass
 
     window.close()
