@@ -1,8 +1,10 @@
-from characterClass import *
+from characterClass import BaseCharacter
 
 class Itto(BaseCharacter):
     def __init__(self):
         super().__init__()
+
+        #Enregistrement des statistiques au niveau 1
 
         baseStats = dict()
         baseStats["hp"] = 1001
@@ -12,20 +14,17 @@ class Itto(BaseCharacter):
         baseStats["crit dmg"] = 0.5
         self.baseStats = baseStats
 
-        statIncreases = [dict() for i in range(89)]
-        statIncreases[0:19]  = {"hp" : 0, "atk" : 0, "def" : 0, "crit rate" : 0, "crit dmg" : 0}
-        statIncreases[20]    = {"hp" : 0, "atk" : 0, "def" : 0, "crit rate" : 0, "crit dmg" : 0}
-        statIncreases[21:39] = {"hp" : 0, "atk" : 0, "def" : 0, "crit rate" : 0, "crit dmg" : 0}
-        statIncreases[40]    = {"hp" : 0, "atk" : 0, "def" : 0, "crit rate" : 0, "crit dmg" : 0}
-        statIncreases[41:49] = {"hp" : 0, "atk" : 0, "def" : 0, "crit rate" : 0, "crit dmg" : 0}
-        statIncreases[50]    = {"hp" : 0, "atk" : 0, "def" : 0, "crit rate" : 0, "crit dmg" : 0}
-        statIncreases[51:59] = {"hp" : 0, "atk" : 0, "def" : 0, "crit rate" : 0, "crit dmg" : 0}
-        statIncreases[60]    = {"hp" : 0, "atk" : 0, "def" : 0, "crit rate" : 0, "crit dmg" : 0}
-        statIncreases[61:69] = {"hp" : 0, "atk" : 0, "def" : 0, "crit rate" : 0, "crit dmg" : 0}
-        statIncreases[70:79] = {"hp" : 0, "atk" : 0, "def" : 0, "crit rate" : 0, "crit dmg" : 0}
-        statIncreases[80]    = {"hp" : 0, "atk" : 0, "def" : 0, "crit rate" : 0, "crit dmg" : 0}
-        statIncreases[81:89] = {"hp" : 0, "atk" : 0, "def" : 0, "crit rate" : 0, "crit dmg" : 0}
-        self.statIncreases = statIncreases
+        #Enregistrement des increases au niveau de personnage i+1 (0 au rang 0)
+
+        hpIncreases = [0 for i in range(89)]
+        atkIncreases = [0 for i in range(89)]
+        defIncreases = [0 for i in range(89)]
+        critRateIncreases = [0 for i in range(89)]
+        critDmgIncreases = [0 for i in range(89)]
+
+        
+
+        self.set_statIncreases(hpIncreases, atkIncreases, defIncreases, critRateIncreases, critDmgIncreases)
 
         
         #TODO
