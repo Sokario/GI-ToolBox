@@ -13,8 +13,11 @@ def resource_path(relative_path):
 
     return os.path.join(base_path, relative_path)
 
+sGUI.FileBrowse
+
 if __name__ == "__main__" :
     itto_img = resource_path("itto.png")
+    print(itto_img)
     image_viewer = [
         [sGUI.Text("Choose an image from list on left:")],
         [sGUI.Text(size = (40, 1), key = "-TOUT-")],
@@ -23,7 +26,7 @@ if __name__ == "__main__" :
     layout = [[sGUI.Text("ToolBox from PySimpleGUI")], [sGUI.Button("OK")], image_viewer]
 
     # Create the window
-    window = sGUI.Window("Genshin Impact ToolBox", layout, margins = (720, 480)).read()
+    window = sGUI.Window("Genshin Impact ToolBox", layout)
 
     # Create an event loop
     while True:
