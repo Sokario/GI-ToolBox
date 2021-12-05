@@ -26,7 +26,7 @@ if __name__ == "__main__" :
     layout = [[sGUI.Text("ToolBox from PySimpleGUI")], [sGUI.Button("OK")], image_viewer]
 
     # Create the window
-    window = sGUI.Window("Genshin Impact ToolBox", layout)
+    window = sGUI.Window("Genshin Impact ToolBox", layout, size = (720, 480))
 
     # Create an event loop
     while True:
