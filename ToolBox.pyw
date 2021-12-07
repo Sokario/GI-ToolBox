@@ -1,10 +1,23 @@
-import os
-import sys
-import io
+import os, sys, io
+import re as regex
 
-from PIL import Image, ImageTk
+from PIL import Image
 import PySimpleGUI as sGUI
 from PySimpleGUI.PySimpleGUI import TIMEOUT_KEY
+
+class PrintColors:
+    HEADER = '\033[95m'
+    BLUE = '\033[34m'
+    LBLUE = '\033[94m'
+    CYAN = '\033[36m'
+    LCYAN = '\033[96m'
+    GREEN = '\033[32m'
+    LGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
 
 window_size = (720, 480)
 
@@ -31,26 +44,75 @@ def img_data(filepath, size=(100, 180)):
 
 if __name__ == "__main__" :
     img_path = resource_path("itto.png")
-    chara_baseSize = (80, 100)
+    chara_baseSize = (100, 120)
     #chara_size = (int(chara_baseSize * img.size[0] / img.size[1]), chara_baseSize)
     #print(img.size, img.size[0]/img.size[1], "|", chara_baseSize, "=>", chara_size, chara_size[0]/chara_size[1])
-    
-    #layout =   [[sg.Text('Button Grid', font='Default 25')],
-    #           [sg.Text(size=(15,1), key='-MESSAGE-', font='Default 20')]]
 
-    max_preview = 45 + 1
+    max_chara = 45 + 1
     max_cols = int(window_size[0] / chara_baseSize[0])
-    max_rows = int(max_preview / max_cols)
+    max_rows = int(max_chara / max_cols)
     print(max_cols, max_rows, max_cols * max_rows)
+
+    preview_list = ["voyagerF.png", "albedo.png", "itto.png", "zhongli.png"]
+
+
+    preview0 = [
+        [
+            sGUI.Button("", image_data = img_data(resource_path(preview_list[0]), chara_baseSize), image_size = chara_baseSize, border_width = (0, 0), key = f"-CHARA{0}-", metadata = "voyagerF"),
+            sGUI.Button("", image_data = img_data(resource_path("new.png"), chara_baseSize), image_size = chara_baseSize, border_width = (0, 0), key = f"-ADD-")
+        ]
+    ]
+    preview1 = [
+        [
+            sGUI.Button("", image_data = img_data(resource_path(preview_list[0]), chara_baseSize), image_size = chara_baseSize, border_width = (0, 0), key = f"-CHARA{0}-", metadata = "voyagerF"),
+            sGUI.Button("", image_data = img_data(resource_path(preview_list[1]), chara_baseSize), image_size = chara_baseSize, border_width = (0, 0), key = f"-CHARA{1}-", metadata = "albedo"),
+            sGUI.Button("", image_data = img_data(resource_path("new.png"), chara_baseSize), image_size = chara_baseSize, border_width = (0, 0), key = f"-ADD-")
+        ]
+    ]
+    preview2 = [
+        [
+            sGUI.Button("", image_data = img_data(resource_path(preview_list[0]), chara_baseSize), image_size = chara_baseSize, border_width = (0, 0), key = f"-CHARA{0}-", metadata = "voyagerF"),
+            sGUI.Button("", image_data = img_data(resource_path(preview_list[1]), chara_baseSize), image_size = chara_baseSize, border_width = (0, 0), key = f"-CHARA{1}-", metadata = "albedo"),
+            sGUI.Button("", image_data = img_data(resource_path(preview_list[2]), chara_baseSize), image_size = chara_baseSize, border_width = (0, 0), key = f"-CHARA{2}-", metadata = "itto"),
+            sGUI.Button("", image_data = img_data(resource_path("new.png"), chara_baseSize), image_size = chara_baseSize, border_width = (0, 0), key = f"-ADD-")
+        ]
+    ]
+    preview3 = [
+        [
+            sGUI.Button("", image_data = img_data(resource_path(preview_list[0]), chara_baseSize), image_size = chara_baseSize, border_width = (0, 0), key = f"-CHARA{0}-", metadata = "voyagerF"),
+            sGUI.Button("", image_data = img_data(resource_path(preview_list[1]), chara_baseSize), image_size = chara_baseSize, border_width = (0, 0), key = f"-CHARA{1}-", metadata = "albedo"),
+            sGUI.Button("", image_data = img_data(resource_path(preview_list[2]), chara_baseSize), image_size = chara_baseSize, border_width = (0, 0), key = f"-CHARA{2}-", metadata = "itto"),
+            sGUI.Button("", image_data = img_data(resource_path(preview_list[3]), chara_baseSize), image_size = chara_baseSize, border_width = (0, 0), key = f"-CHARA{3}-", metadata = "zhongli"),
+        ]
+    ]
+    preview = [preview0, preview1, preview2, preview3]
+
+    #table =  [[sGUI.Button("", image_data = img_data(img_path, chara_baseSize), button_color=(sGUI.theme_background_color(), sGUI.theme_background_color()), border_width=0, key=(row,col)) for col in range(max_cols)] for row in range(max_rows)]
+    table = sGUI.Column([[sGUI.Button("", image_data = img_data(img_path, chara_baseSize), image_size = chara_baseSize, border_width = (0, 0), key=(row,col)) for col in range(max_cols)] for row in range(max_rows)], justification = "center")
+    table = []
+    for row in range(max_rows):
+        line = []
+        for col in range(max_cols):
+            line.append(sGUI.Button("", image_data = img_data(img_path, chara_baseSize), image_size = chara_baseSize, border_width = (0, 0), key=(row,col)))
+            line.append(sGUI.Stretch())
+        line.pop(-1)
+        table.append(line)
+        table.append([sGUI.VStretch()])
+    table.pop(-1)
+
+    #table = [
+    #    [sGUI.Button("0|0"), sGUI.Stretch(), sGUI.Button("0|1"), sGUI.Stretch(), sGUI.Button("0|2")],
+    #    [sGUI.VStretch()],
+    #    [sGUI.Button("1|0"), sGUI.Stretch(), sGUI.Button("1|1"), sGUI.Stretch(), sGUI.Button("1|2")],
+    #    [sGUI.VStretch()],
+    #    [sGUI.Button("2|0"), sGUI.Stretch(), sGUI.Button("2|1"), sGUI.Stretch(), sGUI.Button("2|2")]
+    #]
+
     layout = [
         [sGUI.Text("Button Grid")],
-        [sGUI.Button("", image_data = img_data(img_path, chara_baseSize), button_color=(sGUI.theme_background_color(), sGUI.theme_background_color()), border_width = 0, key = "EXIT")]
-        ]
-    table =  [[sGUI.Button("", image_data = img_data(img_path, chara_baseSize), button_color=(sGUI.theme_background_color(), sGUI.theme_background_color()), border_width=0, key=(row,col)) for col in range(max_cols)] for row in range(max_rows)]
-
-    layout += table#[[sGUI.Table(table)]]
-
-    chara_num = 45 + 1
+        [sGUI.Column(preview0, visible = True, justification = "center", key = "COL0"), sGUI.Column(preview1, visible = False, justification = "center", key = "COL1"), sGUI.Column(preview2, visible = False, justification = "center", key = "COL2"), sGUI.Column(preview3, visible = False, justification = "center", key = "COL3")],
+       # [sGUI.Frame("", layout = table, pad = (0, 0), expand_x = True, expand_y = True)]
+    ]
 
     # Resource window icon
     if (sys.platform.startswith("win")):
@@ -59,16 +121,34 @@ if __name__ == "__main__" :
         window_icon = resource_path("icon.png")
 
     # Create main Window
-    window = sGUI.Window("Genshin Impact ToolBox", layout, icon = window_icon, titlebar_icon = window_icon, size = window_size, use_ttk_buttons=True, resizable = True)   
+    window = sGUI.Window("Genshin Impact ToolBox", layout, icon = window_icon, titlebar_icon = window_icon, size = window_size, margins = (0, 0), element_padding = (0, 0), use_ttk_buttons = True, resizable = True)
+    print(window.ElementPadding)
 
+    preview_index = 0
+    add_pattern = "^-ADD-*"
+    chara_pattern = "^-CHARA[0-3]-*"
     # Create an event loop
     while True:
-        event, values = window.read(timeout = 100)
+        event, values = window.read()
 
-        print(event)        
+        print(event, values)
         # End program if user closes window or presses the OK button
-        if (event == "EXIT" or event == sGUI.WIN_CLOSED):
+        if (event == sGUI.WIN_CLOSED):
             break
+        elif (regex.match(add_pattern, event)):
+            window[f"COL{preview_index}"].update(visible = False)
+            preview_index += 1
+            window[f"COL{preview_index}"].update(visible = True)
+            print(f"{PrintColors.FAIL}ToDo => Update the previews{PrintColors.ENDC}")
+        elif (regex.match(chara_pattern, event)):
+            chara_id = window[event].metadata
+            print(chara_id)
+            index = int(regex.findall("\d", event)[0])
+            if (preview_index > 0):
+                window[f"COL{preview_index}"].update(visible = False)
+                preview_index -= 1
+                window[f"COL{preview_index}"].update(visible = True)
+                print(f"{PrintColors.FAIL}ToDo => Update the previews{PrintColors.ENDC}")
         elif (event == TIMEOUT_KEY):
             pass
 
