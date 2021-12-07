@@ -132,7 +132,7 @@ if __name__ == "__main__" :
     window = sGUI.Window("Genshin Impact ToolBox", layout, icon = window_icon, titlebar_icon = window_icon, size = window_size, margins = (0, 0), element_padding = (0, 0), use_ttk_buttons = True, resizable = True)
     print(window.ElementPadding)
 
-    preview_chara_list = ["voyagerM.png", None, None, None]
+    preview_chara_list = ["voyagerM.png", "albedo.png", "itto.png", "zhongli.png"]
     preview_index = 0
     add_pattern = "^-ADD-*"
     chara_pattern = "^-CHARA[0-3]-*"
