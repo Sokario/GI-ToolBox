@@ -20,6 +20,7 @@ class PrintColors:
     UNDERLINE = '\033[4m'
 
 window_size = (720, 480)
+chara_baseSize = (100, 120)
 
 def resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
@@ -32,9 +33,7 @@ def resource_path(relative_path):
     return os.path.join(base_path, relative_path)
 
 def img_data(filepath, size=(100, 180)):
-    """
-    Generate image data using PIL
-    """
+    """ Generate image data using PIL """
     img = Image.open(filepath)
     img.thumbnail(size)
     bio = io.BytesIO()
@@ -42,9 +41,21 @@ def img_data(filepath, size=(100, 180)):
     del img
     return bio.getvalue()
 
+def update_preview(window: sGUI.Window, source_index: int, dest_index: int, chara_list: list, remove_index: int = None):
+    if (remove_index != None and source_index > dest_index):
+        for i in range(remove_index, source_index, 1):
+            chara_list[i] = chara_list[i + 1]
+        chara_list[-1] = None
+        print(chara_list)
+
+    for index in range(0, dest_index + 1, 1):
+        chara_list[index] = "voyagerM.png" if chara_list[index] == None else chara_list[index]
+        window[f"-CHARA{index}-{dest_index}"].update(image_data = img_data(resource_path(chara_list[index]), chara_baseSize))
+        window[f"-CHARA{index}-{dest_index}"].metadata = chara_list[index]
+    pass
+
 if __name__ == "__main__" :
     img_path = resource_path("itto.png")
-    chara_baseSize = (100, 120)
     #chara_size = (int(chara_baseSize * img.size[0] / img.size[1]), chara_baseSize)
     #print(img.size, img.size[0]/img.size[1], "|", chara_baseSize, "=>", chara_size, chara_size[0]/chara_size[1])
 
@@ -53,36 +64,33 @@ if __name__ == "__main__" :
     max_rows = int(max_chara / max_cols)
     print(max_cols, max_rows, max_cols * max_rows)
 
-    preview_list = ["voyagerF.png", "albedo.png", "itto.png", "zhongli.png"]
-
-
     preview0 = [
         [
-            sGUI.Button("", image_data = img_data(resource_path(preview_list[0]), chara_baseSize), image_size = chara_baseSize, border_width = (0, 0), key = f"-CHARA{0}-", metadata = "voyagerF"),
+            sGUI.Button("", image_data = img_data(resource_path("voyagerM.png"), chara_baseSize), image_size = chara_baseSize, border_width = (0, 0), key = f"-CHARA{0}-0", metadata = "voyagerM"),
             sGUI.Button("", image_data = img_data(resource_path("new.png"), chara_baseSize), image_size = chara_baseSize, border_width = (0, 0), key = f"-ADD-")
         ]
     ]
     preview1 = [
         [
-            sGUI.Button("", image_data = img_data(resource_path(preview_list[0]), chara_baseSize), image_size = chara_baseSize, border_width = (0, 0), key = f"-CHARA{0}-", metadata = "voyagerF"),
-            sGUI.Button("", image_data = img_data(resource_path(preview_list[1]), chara_baseSize), image_size = chara_baseSize, border_width = (0, 0), key = f"-CHARA{1}-", metadata = "albedo"),
+            sGUI.Button("", image_data = None, image_size = chara_baseSize, border_width = (0, 0), key = f"-CHARA{0}-1", metadata = "voyagerM"),
+            sGUI.Button("", image_data = None, image_size = chara_baseSize, border_width = (0, 0), key = f"-CHARA{1}-1", metadata = "albedo"),
             sGUI.Button("", image_data = img_data(resource_path("new.png"), chara_baseSize), image_size = chara_baseSize, border_width = (0, 0), key = f"-ADD-")
         ]
     ]
     preview2 = [
         [
-            sGUI.Button("", image_data = img_data(resource_path(preview_list[0]), chara_baseSize), image_size = chara_baseSize, border_width = (0, 0), key = f"-CHARA{0}-", metadata = "voyagerF"),
-            sGUI.Button("", image_data = img_data(resource_path(preview_list[1]), chara_baseSize), image_size = chara_baseSize, border_width = (0, 0), key = f"-CHARA{1}-", metadata = "albedo"),
-            sGUI.Button("", image_data = img_data(resource_path(preview_list[2]), chara_baseSize), image_size = chara_baseSize, border_width = (0, 0), key = f"-CHARA{2}-", metadata = "itto"),
+            sGUI.Button("", image_data = None, image_size = chara_baseSize, border_width = (0, 0), key = f"-CHARA{0}-2", metadata = "voyagerM"),
+            sGUI.Button("", image_data = None, image_size = chara_baseSize, border_width = (0, 0), key = f"-CHARA{1}-2", metadata = "albedo"),
+            sGUI.Button("", image_data = None, image_size = chara_baseSize, border_width = (0, 0), key = f"-CHARA{2}-2", metadata = "itto"),
             sGUI.Button("", image_data = img_data(resource_path("new.png"), chara_baseSize), image_size = chara_baseSize, border_width = (0, 0), key = f"-ADD-")
         ]
     ]
     preview3 = [
         [
-            sGUI.Button("", image_data = img_data(resource_path(preview_list[0]), chara_baseSize), image_size = chara_baseSize, border_width = (0, 0), key = f"-CHARA{0}-", metadata = "voyagerF"),
-            sGUI.Button("", image_data = img_data(resource_path(preview_list[1]), chara_baseSize), image_size = chara_baseSize, border_width = (0, 0), key = f"-CHARA{1}-", metadata = "albedo"),
-            sGUI.Button("", image_data = img_data(resource_path(preview_list[2]), chara_baseSize), image_size = chara_baseSize, border_width = (0, 0), key = f"-CHARA{2}-", metadata = "itto"),
-            sGUI.Button("", image_data = img_data(resource_path(preview_list[3]), chara_baseSize), image_size = chara_baseSize, border_width = (0, 0), key = f"-CHARA{3}-", metadata = "zhongli"),
+            sGUI.Button("", image_data = None, image_size = chara_baseSize, border_width = (0, 0), key = f"-CHARA{0}-3", metadata = "voyagerM"),
+            sGUI.Button("", image_data = None, image_size = chara_baseSize, border_width = (0, 0), key = f"-CHARA{1}-3", metadata = "albedo"),
+            sGUI.Button("", image_data = None, image_size = chara_baseSize, border_width = (0, 0), key = f"-CHARA{2}-3", metadata = "itto"),
+            sGUI.Button("", image_data = None, image_size = chara_baseSize, border_width = (0, 0), key = f"-CHARA{3}-3", metadata = "zhongli"),
         ]
     ]
     preview = [preview0, preview1, preview2, preview3]
@@ -124,6 +132,7 @@ if __name__ == "__main__" :
     window = sGUI.Window("Genshin Impact ToolBox", layout, icon = window_icon, titlebar_icon = window_icon, size = window_size, margins = (0, 0), element_padding = (0, 0), use_ttk_buttons = True, resizable = True)
     print(window.ElementPadding)
 
+    preview_chara_list = ["voyagerM.png", None, None, None]
     preview_index = 0
     add_pattern = "^-ADD-*"
     chara_pattern = "^-CHARA[0-3]-*"
@@ -137,18 +146,19 @@ if __name__ == "__main__" :
             break
         elif (regex.match(add_pattern, event)):
             window[f"COL{preview_index}"].update(visible = False)
+            update_preview(window = window, source_index = preview_index, dest_index = preview_index + 1, chara_list = preview_chara_list)
             preview_index += 1
             window[f"COL{preview_index}"].update(visible = True)
-            print(f"{PrintColors.FAIL}ToDo => Update the previews{PrintColors.ENDC}")
         elif (regex.match(chara_pattern, event)):
             chara_id = window[event].metadata
             print(chara_id)
+            print(window[event].get_size())
             index = int(regex.findall("\d", event)[0])
             if (preview_index > 0):
                 window[f"COL{preview_index}"].update(visible = False)
+                update_preview(window = window, source_index = preview_index, dest_index = preview_index - 1, remove_index = index, chara_list = preview_chara_list)
                 preview_index -= 1
                 window[f"COL{preview_index}"].update(visible = True)
-                print(f"{PrintColors.FAIL}ToDo => Update the previews{PrintColors.ENDC}")
         elif (event == TIMEOUT_KEY):
             pass
 
