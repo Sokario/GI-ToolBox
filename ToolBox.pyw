@@ -164,7 +164,7 @@ if __name__ == "__main__" :
                 window[f"COL{preview_index}"].update(visible = True)
         elif (regex.match(over_pattern, event)):
             index = int(regex.findall("\d", event)[0])
-            print(f"{PrintColors.FAIL}ToDo: Update display stats")
+            print(f"{PrintColors.FAIL}ToDo: Update display stats{PrintColors.ENDC}")
         elif (event == TIMEOUT_KEY):
             pass
 
