@@ -45,7 +45,7 @@ def update_preview(window: sGUI.Window, source_index: int, dest_index: int, char
     if (remove_index != None and source_index > dest_index):
         for i in range(remove_index, source_index, 1):
             chara_list[i] = chara_list[i + 1]
-        chara_list[-1] = None
+        chara_list[source_index] = None
         print(chara_list)
 
     for index in range(0, dest_index + 1, 1):
