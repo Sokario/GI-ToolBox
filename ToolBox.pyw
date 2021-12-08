@@ -129,13 +129,16 @@ if __name__ == "__main__" :
         window_icon = resource_path("icon.png")
 
     # Create main Window
-    window = sGUI.Window("Genshin Impact ToolBox", layout, icon = window_icon, titlebar_icon = window_icon, size = window_size, margins = (0, 0), element_padding = (0, 0), use_ttk_buttons = True, resizable = True)
-    print(window.ElementPadding)
+    window = sGUI.Window("Genshin Impact ToolBox", layout, icon = window_icon, titlebar_icon = window_icon, size = window_size, margins = (0, 0), element_padding = (0, 0), use_ttk_buttons = True, resizable = True, finalize = True)
+    
+    # Bind overing event for character preview
+    [[window[f"-CHARA{index}-{preview_index}"].bind("<Enter>", "+OVER+") for preview_index in range(index, len(preview))] for index in range(len(preview))]
 
     preview_chara_list = ["voyagerM.png", "albedo.png", "itto.png", "zhongli.png"]
     preview_index = 0
-    add_pattern = "^-ADD-*"
-    chara_pattern = "^-CHARA[0-3]-*"
+    add_pattern = "^-ADD-"
+    chara_pattern = "^-CHARA\d-\d$"
+    over_pattern = ".*[+]OVER[+]"
     # Create an event loop
     while True:
         event, values = window.read()
@@ -159,6 +162,9 @@ if __name__ == "__main__" :
                 update_preview(window = window, source_index = preview_index, dest_index = preview_index - 1, remove_index = index, chara_list = preview_chara_list)
                 preview_index -= 1
                 window[f"COL{preview_index}"].update(visible = True)
+        elif (regex.match(over_pattern, event)):
+            index = int(regex.findall("\d", event)[0])
+            print(f"{PrintColors.FAIL}ToDo: Update display stats")
         elif (event == TIMEOUT_KEY):
             pass
 
