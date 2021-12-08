@@ -5,6 +5,9 @@ from PIL import Image
 import PySimpleGUI as sGUI
 from PySimpleGUI.PySimpleGUI import TIMEOUT_KEY
 
+from src.characters import *
+from src.characters.characterClass import BaseCharacter
+
 class PrintColors:
     HEADER = '\033[95m'
     BLUE = '\033[34m'
@@ -21,6 +24,8 @@ class PrintColors:
 
 window_size = (720, 480)
 chara_baseSize = (100, 120)
+chara_preview_list = ["voyagerM.png", "albedo.png", "itto.png", "zhongli.png"]
+full_preview_list = [character_list[i]() for i in range(len(character_list)) if character_list[i] != BaseCharacter]
 
 def resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
@@ -54,15 +59,56 @@ def update_preview(window: sGUI.Window, source_index: int, dest_index: int, char
         window[f"-CHARA{index}-{dest_index}"].metadata = chara_list[index]
     pass
 
+popup = None
+
+def callback(event):
+    global popup
+    x, y = window.TKroot.winfo_pointerxy()
+    widget = window.TKroot.winfo_containing(x, y)
+    # scrollbar not saved as attribute, so not work for it.
+    if widget is not popup:
+        popup.write_event_value('-EXIT-')
+
+def choose_chara_popup(preview_index: int):
+    global popup
+
+    max_cols = 5
+    table = []
+    line = []
+    if (preview_index != 0):
+        line.append(sGUI.Button("", image_data = img_data(resource_path("delete.png"), chara_baseSize), button_color = (sGUI.theme_background_color(), sGUI.theme_background_color()), border_width = 0, key = f"-DELETE-"))
+    for index in range(len(full_preview_list)):
+        if (len(line) % max_cols <= 0):
+            if (len(line) != 0):
+                table.append(line)
+            line = []
+        line.append(sGUI.Button("", image_data = img_data(resource_path(full_preview_list[index].pictures["portrait"]), chara_baseSize), button_color = (sGUI.theme_background_color(), sGUI.theme_background_color()), border_width = 0, key = f"-CHOICE-{index}"))
+    table.append(line)
+
+    popup_layout = [
+        [sGUI.Text("Choose a character")],
+        table,
+        [sGUI.HSeparator()]
+    ]
+
+    popup = sGUI.Window("Character available", popup_layout, no_titlebar = True, grab_anywhere = False, grab_anywhere_using_control = False, keep_on_top = True, finalize = True)
+    window.TKroot.bind("<ButtonRelease-1>", callback, add='+')
+
+    choice_pattern = "^-CHOICE-"
+    event, values = popup.read()
+    print("Popup:", event)
+    popup.close()
+    if (regex.match(choice_pattern, event)):
+        return regex.findall("\d", event)[0]
+    elif (event == "-DELETE-"):
+        return "delete"
+    else:
+        return "exit"
+
 if __name__ == "__main__" :
-    img_path = resource_path("itto.png")
+    print(full_preview_list[0].pictures["portrait"])
     #chara_size = (int(chara_baseSize * img.size[0] / img.size[1]), chara_baseSize)
     #print(img.size, img.size[0]/img.size[1], "|", chara_baseSize, "=>", chara_size, chara_size[0]/chara_size[1])
-
-    max_chara = 45 + 1
-    max_cols = int(window_size[0] / chara_baseSize[0])
-    max_rows = int(max_chara / max_cols)
-    print(max_cols, max_rows, max_cols * max_rows)
 
     preview0 = [
         [
@@ -95,27 +141,6 @@ if __name__ == "__main__" :
     ]
     preview = [preview0, preview1, preview2, preview3]
 
-    #table =  [[sGUI.Button("", image_data = img_data(img_path, chara_baseSize), button_color=(sGUI.theme_background_color(), sGUI.theme_background_color()), border_width=0, key=(row,col)) for col in range(max_cols)] for row in range(max_rows)]
-    table = sGUI.Column([[sGUI.Button("", image_data = img_data(img_path, chara_baseSize), image_size = chara_baseSize, border_width = (0, 0), key=(row,col)) for col in range(max_cols)] for row in range(max_rows)], justification = "center")
-    table = []
-    for row in range(max_rows):
-        line = []
-        for col in range(max_cols):
-            line.append(sGUI.Button("", image_data = img_data(img_path, chara_baseSize), image_size = chara_baseSize, border_width = (0, 0), key=(row,col)))
-            line.append(sGUI.Stretch())
-        line.pop(-1)
-        table.append(line)
-        table.append([sGUI.VStretch()])
-    table.pop(-1)
-
-    #table = [
-    #    [sGUI.Button("0|0"), sGUI.Stretch(), sGUI.Button("0|1"), sGUI.Stretch(), sGUI.Button("0|2")],
-    #    [sGUI.VStretch()],
-    #    [sGUI.Button("1|0"), sGUI.Stretch(), sGUI.Button("1|1"), sGUI.Stretch(), sGUI.Button("1|2")],
-    #    [sGUI.VStretch()],
-    #    [sGUI.Button("2|0"), sGUI.Stretch(), sGUI.Button("2|1"), sGUI.Stretch(), sGUI.Button("2|2")]
-    #]
-
     layout = [
         [sGUI.Text("Button Grid")],
         [sGUI.Column(preview0, visible = True, justification = "center", key = "COL0"), sGUI.Column(preview1, visible = False, justification = "center", key = "COL1"), sGUI.Column(preview2, visible = False, justification = "center", key = "COL2"), sGUI.Column(preview3, visible = False, justification = "center", key = "COL3")],
@@ -134,7 +159,6 @@ if __name__ == "__main__" :
     # Bind overing event for character preview
     [[window[f"-CHARA{index}-{preview_index}"].bind("<Enter>", "+OVER+") for preview_index in range(index, len(preview))] for index in range(len(preview))]
 
-    preview_chara_list = ["voyagerM.png", "albedo.png", "itto.png", "zhongli.png"]
     preview_index = 0
     add_pattern = "^-ADD-"
     chara_pattern = "^-CHARA\d-\d$"
@@ -146,22 +170,26 @@ if __name__ == "__main__" :
         print(event, values)
         # End program if user closes window or presses the OK button
         if (event == sGUI.WIN_CLOSED):
+            popup.write_event_value('WINDOW_CLICK')
             break
         elif (regex.match(add_pattern, event)):
             window[f"COL{preview_index}"].update(visible = False)
-            update_preview(window = window, source_index = preview_index, dest_index = preview_index + 1, chara_list = preview_chara_list)
+            update_preview(window = window, source_index = preview_index, dest_index = preview_index + 1, chara_list = chara_preview_list)
             preview_index += 1
             window[f"COL{preview_index}"].update(visible = True)
         elif (regex.match(chara_pattern, event)):
             chara_id = window[event].metadata
-            print(chara_id)
-            print(window[event].get_size())
+            value = choose_chara_popup(preview_index)
+            print(value)
             index = int(regex.findall("\d", event)[0])
-            if (preview_index > 0):
-                window[f"COL{preview_index}"].update(visible = False)
-                update_preview(window = window, source_index = preview_index, dest_index = preview_index - 1, remove_index = index, chara_list = preview_chara_list)
-                preview_index -= 1
-                window[f"COL{preview_index}"].update(visible = True)
+            if (value == "delete"):
+                if (preview_index > 0):
+                    window[f"COL{preview_index}"].update(visible = False)
+                    update_preview(window = window, source_index = preview_index, dest_index = preview_index - 1, remove_index = index, chara_list = chara_preview_list)
+                    preview_index -= 1
+                    window[f"COL{preview_index}"].update(visible = True)
+            else:
+                print(f"{PrintColors.FAIL}ToDo: Update display preview{PrintColors.ENDC}")
         elif (regex.match(over_pattern, event)):
             index = int(regex.findall("\d", event)[0])
             print(f"{PrintColors.FAIL}ToDo: Update display stats{PrintColors.ENDC}")
