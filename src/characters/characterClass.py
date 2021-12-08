@@ -1,8 +1,25 @@
-#from abc import abstractmethod
-from . import weaponClass as wc
+import os, sys
+
+dir_path = os.path.dirname(os.path.realpath(__file__))
+parent_dir_path = os.path.abspath(os.path.join(dir_path, os.pardir))
+sys.path.insert(0, parent_dir_path)
+
+from src.weapons import weaponClass as wc
 
 class BaseCharacter():
     def __init__(self) :
+        self.name = None
+        
+        #Graphics used for interfaces
+        self.pictures = {
+            "portrait": None,
+            "banner": None,
+            "abilities": [None, None, None],
+            "passives": [None, None, None],
+            "constellations": [None, None, None, None, None, None]
+            }
+
+        self.rarity = 0
         self.level = 1
 
         self.baseStats = dict()
