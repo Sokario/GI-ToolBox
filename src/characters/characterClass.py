@@ -8,7 +8,7 @@ from src.weapons import weaponClass as wc
 
 class BaseCharacter():
     def __init__(self) :
-        self.name = None
+        self.name = str()
         
         #Graphics used for interfaces
         self.pictures = {
@@ -22,7 +22,7 @@ class BaseCharacter():
         self.rarity = 0
         self.level = 1
 
-        self.baseStats = dict()
+        #self.baseStats = dict()
         #self.statIncreases = list() #Liste de dictionnaires taille max 90
         self.statsAtLevel = dict() #dict de listes
 
