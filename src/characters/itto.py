@@ -29,21 +29,14 @@ class Itto(BaseCharacter):
 
         #Enregistrement des statistiques au niveau 1
         self.rarity = 5
-        baseStats = dict()
-        baseStats["hp"] = 1001
-        baseStats["atk"] = 18
-        baseStats["def"] = 75
-        baseStats["crit rate"] = 0.05
-        baseStats["crit dmg"] = 0.5
-        self.baseStats = baseStats
 
         #Enregistrement des increases au niveau de personnage i+1 (0 au rang 0)
 
-        hpIncreases = [1001 for i in range(89)]
-        atkIncreases = [18 for i in range(89)]
-        defIncreases = [75 for i in range(89)]
-        critRateIncreases = [0.05 for i in range(89)]
-        critDmgIncreases = [0.50 for i in range(89)]
+        hpIncreases = [1001 for _ in range(89)]
+        atkIncreases = [18 for _ in range(89)]
+        defIncreases = [75 for _ in range(89)]
+        critRateIncreases = [0.05 for _ in range(89)]
+        critDmgIncreases = [0.50 for _ in range(89)]
 
         hpIncreases[1:19]  = [2597 for _ in range(1, 19)]
         hpIncreases[20]    = 3455
