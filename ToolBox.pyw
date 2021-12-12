@@ -25,10 +25,9 @@ class PrintColors:
 
 window_size = (720, 480)
 chara_baseSize = (100, 120)
-chara_preview_list = [-1, -1, -1, -1]
+chara_preview_list = [None, None, None, None]
 full_preview_list = [character_list[i]() for i in range(len(character_list)) if (character_list[i] != BaseCharacter and character_list[i] != Voyager)]
 full_preview_list.append(Voyager())
-print(full_preview_list)
 popup = None
 
 def resource_path(relative_path):
