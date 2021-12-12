@@ -42,6 +42,7 @@ def resource_path(relative_path):
 
 def img_data(filepath, size=(100, 180)):
     """ Generate image data using PIL """
+    # !!!! Itto casse les couille sur la taille d'image
     img = Image.open(filepath)
     img.thumbnail(size)
     bio = io.BytesIO()
