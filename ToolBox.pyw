@@ -7,6 +7,7 @@ from PySimpleGUI.PySimpleGUI import TIMEOUT_KEY
 
 from src.characters import *
 from src.characters.characterClass import BaseCharacter
+from src.characters.voyager import Voyager
 
 class PrintColors:
     HEADER = '\033[95m'
@@ -24,8 +25,10 @@ class PrintColors:
 
 window_size = (720, 480)
 chara_baseSize = (100, 120)
-chara_preview_list = ["voyagerM.png", "albedo.png", "itto.png", "zhongli.png"]
-full_preview_list = [character_list[i]() for i in range(len(character_list)) if character_list[i] != BaseCharacter]
+chara_preview_list = [-1, -1, -1, -1]
+full_preview_list = [character_list[i]() for i in range(len(character_list)) if (character_list[i] != BaseCharacter and character_list[i] != Voyager)]
+full_preview_list.append(Voyager())
+print(full_preview_list)
 popup = None
 
 def resource_path(relative_path):
@@ -47,18 +50,19 @@ def img_data(filepath, size=(100, 180)):
     del img
     return bio.getvalue()
 
-def update_preview(window: sGUI.Window, source_index: int, dest_index: int, chara_list: list, remove_index: int = None):
+def update_preview(window: sGUI.Window, source_index: int, dest_index: int, remove_index: int = None):
     if (remove_index != None and source_index > dest_index):
         for i in range(remove_index, source_index, 1):
-            chara_list[i] = chara_list[i + 1]
-        chara_list[source_index] = None
-        print(chara_list)
+            chara_preview_list[i] = chara_preview_list[i + 1]
+        chara_preview_list[source_index] = None
+        print(chara_preview_list)
 
     for index in range(0, dest_index + 1, 1):
-        chara_list[index] = "voyagerM.png" if chara_list[index] == None else chara_list[index]
-        window[f"-CHARA{index}-{dest_index}"].update(image_data = img_data(resource_path(chara_list[index]), chara_baseSize))
-        window[f"-CHARA{index}-{dest_index}"].metadata = chara_list[index]
-    pass
+        chara_preview_list[index] = -1 if chara_preview_list[index] == None else chara_preview_list[index]
+        window[f"-CHARA{index}-{dest_index}"].update(image_data = img_data(resource_path(full_preview_list[chara_preview_list[index]].pictures["portrait"]), chara_baseSize))
+        window[f"-CHARA{index}-{dest_index}"].metadata = chara_preview_list[index]
+    
+    print(chara_preview_list)
 
 def choose_chara_popup(preview_index: int):
     max_cols = 5
@@ -71,7 +75,7 @@ def choose_chara_popup(preview_index: int):
             if (len(line) != 0):
                 table.append(line)
             line = []
-        line.append(sGUI.Button("", image_data = img_data(resource_path(full_preview_list[index].pictures["portrait"]), chara_baseSize), button_color = (sGUI.theme_background_color(), sGUI.theme_background_color()), border_width = 0, key = f"-CHOICE-{index}"))
+        line.append(sGUI.Button("", image_data = img_data(resource_path(full_preview_list[index].pictures["portrait"]), chara_baseSize), button_color = (sGUI.theme_background_color(), sGUI.theme_background_color()), border_width = 0, metadata = index, key = f"-CHOICE-{index}"))
     table.append(line)
 
     popup_layout = [
@@ -140,49 +144,57 @@ if __name__ == "__main__" :
     [[window[f"-CHARA{index}-{preview_index}"].bind("<Enter>", "+OVER+") for preview_index in range(index, len(preview))] for index in range(len(preview))]
 
     preview_index = 0
+    chara_index = None
     add_pattern = "^-ADD-"
     chara_pattern = "^-CHARA\d-\d$"
+    change_pattern = "^-CHANGE-"
+    delete_pattern = "^-DELETE-"
     over_pattern = ".*[+]OVER[+]"
     # Create an event loop
     while True:
-        event, values = window.read(0)
+        event, values = window.read(100)
 
         print(f"WINDOW => {event}: {values}")
         # End program if user closes window or presses the OK button
         if (event == sGUI.WIN_CLOSED):
             break
-        elif (regex.match(chara_pattern, event)):
-            chara_id = window[event].metadata
-            popup = choose_chara_popup(preview_index)
-#            value = choose_chara_popup(popup, preview_index)
-#            print(value)
-#            index = int(regex.findall("\d", event)[0])
-#            if (value == "delete"):
-#                if (preview_index > 0):
-#                    window[f"COL{preview_index}"].update(visible = False)
-#                    update_preview(window = window, source_index = preview_index, dest_index = preview_index - 1, remove_index = index, chara_list = chara_preview_list)
-#                    preview_index -= 1
-#                    window[f"COL{preview_index}"].update(visible = True)
-#            else:
-#                print(f"{PrintColors.FAIL}ToDo: Update display preview{PrintColors.ENDC}")
         elif (regex.match(over_pattern, event)):
             index = int(regex.findall("\d", event)[0])
-            print(f"{PrintColors.FAIL}ToDo: Update display stats{PrintColors.ENDC}")
+            print(f"{PrintColors.FAIL}ToDo: Update display stats -------- !!!!! Nedd to be stop while popup is open{PrintColors.ENDC}")
+        elif (regex.match(chara_pattern, event)):
+            chara_index = int(regex.findall("\d", event)[0])
+            popup = choose_chara_popup(preview_index)
+        elif (regex.match(change_pattern, event)):
+            chara_preview_list[chara_index] = values[event]
+            update_preview(window = window, source_index = preview_index, dest_index = preview_index)
+        elif (regex.match(delete_pattern, event)):
+            window[f"COL{preview_index}"].update(visible = False)
+            update_preview(window = window, source_index = preview_index, dest_index = preview_index - 1, remove_index = chara_index)
+            preview_index -= 1
+            window[f"COL{preview_index}"].update(visible = True)
         elif (regex.match(add_pattern, event)):
             window[f"COL{preview_index}"].update(visible = False)
-            update_preview(window = window, source_index = preview_index, dest_index = preview_index + 1, chara_list = chara_preview_list)
+            update_preview(window = window, source_index = preview_index, dest_index = preview_index + 1)
             preview_index += 1
             window[f"COL{preview_index}"].update(visible = True)
         elif (event == TIMEOUT_KEY):
             if (popup != None):
                 popup_event, popup_values = popup.read(0)
 
-                print(f"POPUP => {popup_event}: {popup_values}")
+                #print(f"POPUP => {popup_event}: {popup_values}")
                 choice_pattern = "^-CHOICE-"
                 if (popup_event == "-EXIT-"):
                     popup.close()
                     popup = None
                 elif (regex.match(choice_pattern, popup_event)):
+                    window.write_event_value("-CHANGE-", popup[popup_event].metadata)
+                    popup.close()
+                    popup = None
+                elif (regex.match(delete_pattern, popup_event)):
+                    window.write_event_value("-DELETE-", None)
+                    popup.close()
+                    popup = None
+                else:
                     pass
 
     window.close()
