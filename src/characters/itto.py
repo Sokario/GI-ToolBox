@@ -9,7 +9,7 @@ from src.characters.characterClass import BaseCharacter
 class Itto(BaseCharacter):
     def __init__(self):
         super().__init__()
-        self.name = "Itto"
+        self.name = "Arataki Itto"
         
         #Graphics used for interfaces
         self.pictures["portrait"]           = "itto.png"
