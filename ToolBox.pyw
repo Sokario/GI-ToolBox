@@ -97,14 +97,14 @@ if __name__ == "__main__" :
     preview0 = [
         [
             sGUI.Button("", image_data = img_data(resource_path("voyagerM.png"), chara_baseSize), image_size = chara_baseSize, border_width = (0, 0), key = f"-CHARA{0}-0", metadata = "voyagerM"),
-            sGUI.Button("", image_data = img_data(resource_path("new.png"), chara_baseSize), image_size = chara_baseSize, border_width = (0, 0), key = f"-ADD-")
+            sGUI.Button("", image_data = img_data(resource_path("new.png"), chara_baseSize), image_size = chara_baseSize, border_width = (0, 0), key = f"-CHARA{1}-")
         ]
     ]
     preview1 = [
         [
             sGUI.Button("", image_data = None, image_size = chara_baseSize, border_width = (0, 0), key = f"-CHARA{0}-1", metadata = "voyagerM"),
             sGUI.Button("", image_data = None, image_size = chara_baseSize, border_width = (0, 0), key = f"-CHARA{1}-1", metadata = "albedo"),
-            sGUI.Button("", image_data = img_data(resource_path("new.png"), chara_baseSize), image_size = chara_baseSize, border_width = (0, 0), key = f"-ADD-")
+            sGUI.Button("", image_data = img_data(resource_path("new.png"), chara_baseSize), image_size = chara_baseSize, border_width = (0, 0), key = f"-CHARA{2}-")
         ]
     ]
     preview2 = [
@@ -112,7 +112,7 @@ if __name__ == "__main__" :
             sGUI.Button("", image_data = None, image_size = chara_baseSize, border_width = (0, 0), key = f"-CHARA{0}-2", metadata = "voyagerM"),
             sGUI.Button("", image_data = None, image_size = chara_baseSize, border_width = (0, 0), key = f"-CHARA{1}-2", metadata = "albedo"),
             sGUI.Button("", image_data = None, image_size = chara_baseSize, border_width = (0, 0), key = f"-CHARA{2}-2", metadata = "itto"),
-            sGUI.Button("", image_data = img_data(resource_path("new.png"), chara_baseSize), image_size = chara_baseSize, border_width = (0, 0), key = f"-ADD-")
+            sGUI.Button("", image_data = img_data(resource_path("new.png"), chara_baseSize), image_size = chara_baseSize, border_width = (0, 0), key = f"-CHARA{3}-")
         ]
     ]
     preview3 = [
@@ -145,8 +145,9 @@ if __name__ == "__main__" :
 
     preview_index = 0
     chara_index = None
+    chara_add = False
     add_pattern = "^-ADD-"
-    chara_pattern = "^-CHARA\d-\d$"
+    chara_pattern = "^-CHARA\d-"
     change_pattern = "^-CHANGE-"
     delete_pattern = "^-DELETE-"
     over_pattern = ".*[+]OVER[+]"
@@ -154,7 +155,7 @@ if __name__ == "__main__" :
     while True:
         event, values = window.read(100)
 
-        print(f"WINDOW => {event}: {values}")
+        #print(f"WINDOW => {event}: {values}")
         # End program if user closes window or presses the OK button
         if (event == sGUI.WIN_CLOSED):
             break
@@ -162,20 +163,23 @@ if __name__ == "__main__" :
             index = int(regex.findall("\d", event)[0])
             print(f"{PrintColors.FAIL}ToDo: Update display stats -------- !!!!! Nedd to be stop while popup is open{PrintColors.ENDC}")
         elif (regex.match(chara_pattern, event)):
-            chara_index = int(regex.findall("\d", event)[0])
-            popup = choose_chara_popup(preview_index)
+            chara_index = regex.findall("\d", event)
+            chara_add = len(chara_index) == 1
+            chara_index = int(chara_index[0])
+            popup = choose_chara_popup(preview_index + (1 if chara_add else 0))
         elif (regex.match(change_pattern, event)):
             chara_preview_list[chara_index] = values[event]
             update_preview(window = window, source_index = preview_index, dest_index = preview_index)
+        elif (regex.match(add_pattern, event)):
+            chara_preview_list[chara_index] = values[event]
+            window[f"COL{preview_index}"].update(visible = False)
+            update_preview(window = window, source_index = preview_index, dest_index = preview_index + 1)
+            preview_index += 1
+            window[f"COL{preview_index}"].update(visible = True)
         elif (regex.match(delete_pattern, event)):
             window[f"COL{preview_index}"].update(visible = False)
             update_preview(window = window, source_index = preview_index, dest_index = preview_index - 1, remove_index = chara_index)
             preview_index -= 1
-            window[f"COL{preview_index}"].update(visible = True)
-        elif (regex.match(add_pattern, event)):
-            window[f"COL{preview_index}"].update(visible = False)
-            update_preview(window = window, source_index = preview_index, dest_index = preview_index + 1)
-            preview_index += 1
             window[f"COL{preview_index}"].update(visible = True)
         elif (event == TIMEOUT_KEY):
             if (popup != None):
@@ -187,11 +191,16 @@ if __name__ == "__main__" :
                     popup.close()
                     popup = None
                 elif (regex.match(choice_pattern, popup_event)):
-                    window.write_event_value("-CHANGE-", popup[popup_event].metadata)
+                    print(chara_index, preview_index)
+                    if (chara_add):
+                        window.write_event_value("-ADD-", popup[popup_event].metadata)
+                    else:
+                        window.write_event_value("-CHANGE-", popup[popup_event].metadata)
                     popup.close()
                     popup = None
                 elif (regex.match(delete_pattern, popup_event)):
-                    window.write_event_value("-DELETE-", None)
+                    if (not chara_add):
+                        window.write_event_value("-DELETE-", None)
                     popup.close()
                     popup = None
                 else:
