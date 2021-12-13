@@ -101,7 +101,7 @@ if __name__ == "__main__" :
 
     preview0 = [
         [
-            sGUI.Button("", image_data = img_data(resource_path("voyagerM.png"), chara_size), image_size = chara_size, border_width = (0, 0), button_color = background_color, key = f"-CHARA{0}-0"),
+            sGUI.Button("", image_data = img_data(resource_path("voyager.png"), chara_size), image_size = chara_size, border_width = (0, 0), button_color = background_color, key = f"-CHARA{0}-0"),
             sGUI.Button("", image_data = img_data(resource_path("new.png"), chara_size), image_size = chara_size, border_width = (0, 0), button_color = background_color, key = f"-CHARA{1}-")
         ]
     ]
@@ -134,7 +134,7 @@ if __name__ == "__main__" :
         [sGUI.Text("Button Grid", background_color = background_color)],
         [sGUI.Column(preview0, visible = True, justification = "center", key = "COL0"), sGUI.Column(preview1, visible = False, justification = "center", key = "COL1"), sGUI.Column(preview2, visible = False, justification = "center", key = "COL2"), sGUI.Column(preview3, visible = False, justification = "center", key = "COL3")],
         [sGUI.HSeparator()],
-        [sGUI.Text("CHARACTER NAME", font = ('Arial', 16, 'bold'), background_color = background_color, text_color = text_color, pad = (20, 0, 0, 0), key = "CHARA NAME"), sGUI.Stretch(background_color = background_color), sGUI.Image(data = img_data(resource_path("voyagerM_party.png"), party_Size), background_color = background_color, key = "PARTY IMAGE")],
+        [sGUI.Text("CHARACTER NAME", font = ('Arial', 16, 'bold'), background_color = background_color, text_color = text_color, pad = (20, 0, 0, 0), key = "CHARA NAME"), sGUI.Stretch(background_color = background_color), sGUI.Image(data = img_data(resource_path("voyager_party.png"), party_Size), background_color = background_color, key = "PARTY IMAGE")],
         [sGUI.HSeparator()]
     ]
 
