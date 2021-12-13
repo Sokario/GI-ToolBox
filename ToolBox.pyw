@@ -1,3 +1,4 @@
+from ctypes import alignment
 import os, sys, io
 import re as regex
 
@@ -24,7 +25,8 @@ class PrintColors:
     UNDERLINE = '\033[4m'
 
 window_size = (720, 480)
-chara_baseSize = (100, 120)
+chara_size = (100, 120)
+party_Size = (380, 100)
 full_preview_list = [character_list[i]() for i in range(len(character_list)) if (character_list[i] != BaseCharacter and character_list[i] != Voyager)]
 full_preview_list.append(Voyager())
 chara_preview_list = [len(full_preview_list)-1, None, None, None]
@@ -40,18 +42,20 @@ def resource_path(relative_path):
 
     return os.path.join(base_path, relative_path)
 
-def img_data(filepath, size=(100, 180)):
+def img_data(filepath, size = None):
     """ Generate image data using PIL """
     # !!!! Itto casse les couille sur la taille d'image
     img = Image.open(filepath)
-    img.thumbnail(size)
+    if (size != None):
+        img.thumbnail(size)
     bio = io.BytesIO()
     img.save(bio, format="PNG")
     del img
     return bio.getvalue()
 
 def update_information(window: sGUI.Window, chara_index: int):
-    window["PARTY IMAGE"].update(data = img_data(resource_path(full_preview_list[chara_preview_list[chara_index]].pictures["banner"]), chara_baseSize))
+    window["CHARA NAME"].update(full_preview_list[chara_preview_list[chara_index]].name)
+    window["PARTY IMAGE"].update(data = img_data(resource_path(full_preview_list[chara_preview_list[chara_index]].pictures["banner"]), party_Size))
 
 def update_preview(window: sGUI.Window, source_index: int, dest_index: int, remove_index: int = None):
     if (remove_index != None and source_index > dest_index):
@@ -62,8 +66,7 @@ def update_preview(window: sGUI.Window, source_index: int, dest_index: int, remo
 
     for index in range(0, dest_index + 1, 1):
         chara_preview_list[index] = -1 if chara_preview_list[index] == None else chara_preview_list[index]
-        window[f"-CHARA{index}-{dest_index}"].update(image_data = img_data(resource_path(full_preview_list[chara_preview_list[index]].pictures["portrait"]), chara_baseSize))
-        window[f"-CHARA{index}-{dest_index}"].metadata = chara_preview_list[index]
+        window[f"-CHARA{index}-{dest_index}"].update(image_data = img_data(resource_path(full_preview_list[chara_preview_list[index]].pictures["portrait"]), chara_size))
     
     print(chara_preview_list)
 
@@ -72,13 +75,13 @@ def choose_chara_popup(preview_index: int):
     table = []
     line = []
     if (preview_index != 0):
-        line.append(sGUI.Button("", image_data = img_data(resource_path("delete.png"), chara_baseSize), button_color = (sGUI.theme_background_color(), sGUI.theme_background_color()), border_width = 0, key = f"-DELETE-"))
+        line.append(sGUI.Button("", image_data = img_data(resource_path("delete.png"), chara_size), button_color = (sGUI.theme_background_color(), sGUI.theme_background_color()), border_width = 0, key = f"-DELETE-"))
     for index in range(len(full_preview_list)):
         if (len(line) % max_cols <= 0):
             if (len(line) != 0):
                 table.append(line)
             line = []
-        line.append(sGUI.Button("", image_data = img_data(resource_path(full_preview_list[index].pictures["portrait"]), chara_baseSize), button_color = (sGUI.theme_background_color(), sGUI.theme_background_color()), border_width = 0, disabled = True if index in chara_preview_list else False, metadata = index, key = f"-CHOICE-{index}"))
+        line.append(sGUI.Button("", image_data = img_data(resource_path(full_preview_list[index].pictures["portrait"]), chara_size), button_color = (sGUI.theme_background_color(), sGUI.theme_background_color()), border_width = 0, disabled = True if index in chara_preview_list else False, key = f"-CHOICE-{index}"))
     table.append(line)
 
     popup_layout = [
@@ -96,31 +99,31 @@ if __name__ == "__main__" :
 
     preview0 = [
         [
-            sGUI.Button("", image_data = img_data(resource_path("voyagerM.png"), chara_baseSize), image_size = chara_baseSize, border_width = (0, 0), key = f"-CHARA{0}-0", metadata = "voyagerM"),
-            sGUI.Button("", image_data = img_data(resource_path("new.png"), chara_baseSize), image_size = chara_baseSize, border_width = (0, 0), key = f"-CHARA{1}-")
+            sGUI.Button("", image_data = img_data(resource_path("voyagerM.png"), chara_size), image_size = chara_size, border_width = (0, 0), key = f"-CHARA{0}-0"),
+            sGUI.Button("", image_data = img_data(resource_path("new.png"), chara_size), image_size = chara_size, border_width = (0, 0), key = f"-CHARA{1}-")
         ]
     ]
     preview1 = [
         [
-            sGUI.Button("", image_data = None, image_size = chara_baseSize, border_width = (0, 0), key = f"-CHARA{0}-1", metadata = "voyagerM"),
-            sGUI.Button("", image_data = None, image_size = chara_baseSize, border_width = (0, 0), key = f"-CHARA{1}-1", metadata = "albedo"),
-            sGUI.Button("", image_data = img_data(resource_path("new.png"), chara_baseSize), image_size = chara_baseSize, border_width = (0, 0), key = f"-CHARA{2}-")
+            sGUI.Button("", image_data = None, image_size = chara_size, border_width = (0, 0), key = f"-CHARA{0}-1"),
+            sGUI.Button("", image_data = None, image_size = chara_size, border_width = (0, 0), key = f"-CHARA{1}-1"),
+            sGUI.Button("", image_data = img_data(resource_path("new.png"), chara_size), image_size = chara_size, border_width = (0, 0), key = f"-CHARA{2}-")
         ]
     ]
     preview2 = [
         [
-            sGUI.Button("", image_data = None, image_size = chara_baseSize, border_width = (0, 0), key = f"-CHARA{0}-2", metadata = "voyagerM"),
-            sGUI.Button("", image_data = None, image_size = chara_baseSize, border_width = (0, 0), key = f"-CHARA{1}-2", metadata = "albedo"),
-            sGUI.Button("", image_data = None, image_size = chara_baseSize, border_width = (0, 0), key = f"-CHARA{2}-2", metadata = "itto"),
-            sGUI.Button("", image_data = img_data(resource_path("new.png"), chara_baseSize), image_size = chara_baseSize, border_width = (0, 0), key = f"-CHARA{3}-")
+            sGUI.Button("", image_data = None, image_size = chara_size, border_width = (0, 0), key = f"-CHARA{0}-2"),
+            sGUI.Button("", image_data = None, image_size = chara_size, border_width = (0, 0), key = f"-CHARA{1}-2"),
+            sGUI.Button("", image_data = None, image_size = chara_size, border_width = (0, 0), key = f"-CHARA{2}-2"),
+            sGUI.Button("", image_data = img_data(resource_path("new.png"), chara_size), image_size = chara_size, border_width = (0, 0), key = f"-CHARA{3}-")
         ]
     ]
     preview3 = [
         [
-            sGUI.Button("", image_data = None, image_size = chara_baseSize, border_width = (0, 0), key = f"-CHARA{0}-3", metadata = "voyagerM"),
-            sGUI.Button("", image_data = None, image_size = chara_baseSize, border_width = (0, 0), key = f"-CHARA{1}-3", metadata = "albedo"),
-            sGUI.Button("", image_data = None, image_size = chara_baseSize, border_width = (0, 0), key = f"-CHARA{2}-3", metadata = "itto"),
-            sGUI.Button("", image_data = None, image_size = chara_baseSize, border_width = (0, 0), key = f"-CHARA{3}-3", metadata = "zhongli"),
+            sGUI.Button("", image_data = None, image_size = chara_size, border_width = (0, 0), key = f"-CHARA{0}-3"),
+            sGUI.Button("", image_data = None, image_size = chara_size, border_width = (0, 0), key = f"-CHARA{1}-3"),
+            sGUI.Button("", image_data = None, image_size = chara_size, border_width = (0, 0), key = f"-CHARA{2}-3"),
+            sGUI.Button("", image_data = None, image_size = chara_size, border_width = (0, 0), key = f"-CHARA{3}-3"),
         ]
     ]
     preview = [preview0, preview1, preview2, preview3]
@@ -128,7 +131,9 @@ if __name__ == "__main__" :
     layout = [
         [sGUI.Text("Button Grid")],
         [sGUI.Column(preview0, visible = True, justification = "center", key = "COL0"), sGUI.Column(preview1, visible = False, justification = "center", key = "COL1"), sGUI.Column(preview2, visible = False, justification = "center", key = "COL2"), sGUI.Column(preview3, visible = False, justification = "center", key = "COL3")],
-        [sGUI.Frame("", layout = [[sGUI.Image(data = img_data(resource_path("noelle_party.png")), expand_x = True, key = "PARTY IMAGE")]], expand_x = True)]
+        [sGUI.HSeparator()],
+        [sGUI.Text("CHARACTER NAME", pad = (20, 0, 0, 0), key = "CHARA NAME"), sGUI.Stretch(), sGUI.Image(data = img_data(resource_path("voyagerM_party.png"), party_Size), key = "PARTY IMAGE")],
+        [sGUI.HSeparator()]
     ]
 
     # Resource window icon
@@ -192,7 +197,8 @@ if __name__ == "__main__" :
                     popup.close()
                     popup = None
                 elif (regex.match(choice_pattern, popup_event)):
-                    window.write_event_value("-ADD-" if chara_add else "-CHANGE-", popup[popup_event].metadata)
+                    index = int(regex.findall("\d", popup_event)[0])
+                    window.write_event_value("-ADD-" if chara_add else "-CHANGE-", index)
                     popup.close()
                     popup = None
                 elif (regex.match(delete_pattern, popup_event)):
