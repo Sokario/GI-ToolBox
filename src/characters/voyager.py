@@ -12,8 +12,8 @@ class Voyager(BaseCharacter):
         self.name = "Voyager"
         
         #Graphics used for interfaces
-        self.pictures["portrait"]           = "voyagerM.png"
-        self.pictures["banner"]             = "voyagerM_party.png"
+        self.pictures["portrait"]           = "voyager.png"
+        self.pictures["banner"]             = "voyager_party.png"
         self.pictures["abilities"][0]       = "sword.png"
         self.pictures["abilities"][1]       = "sword.png"
         self.pictures["abilities"][2]       = "sword.png"
