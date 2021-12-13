@@ -25,9 +25,9 @@ class PrintColors:
 
 window_size = (720, 480)
 chara_baseSize = (100, 120)
-chara_preview_list = [None, None, None, None]
 full_preview_list = [character_list[i]() for i in range(len(character_list)) if (character_list[i] != BaseCharacter and character_list[i] != Voyager)]
 full_preview_list.append(Voyager())
+chara_preview_list = [len(full_preview_list)-1, None, None, None]
 popup = None
 
 def resource_path(relative_path):
@@ -49,6 +49,9 @@ def img_data(filepath, size=(100, 180)):
     img.save(bio, format="PNG")
     del img
     return bio.getvalue()
+
+def update_information(window: sGUI.Window, chara_index: int):
+    window["PARTY IMAGE"].update(data = img_data(resource_path(full_preview_list[chara_preview_list[chara_index]].pictures["banner"]), chara_baseSize))
 
 def update_preview(window: sGUI.Window, source_index: int, dest_index: int, remove_index: int = None):
     if (remove_index != None and source_index > dest_index):
@@ -75,7 +78,7 @@ def choose_chara_popup(preview_index: int):
             if (len(line) != 0):
                 table.append(line)
             line = []
-        line.append(sGUI.Button("", image_data = img_data(resource_path(full_preview_list[index].pictures["portrait"]), chara_baseSize), button_color = (sGUI.theme_background_color(), sGUI.theme_background_color()), border_width = 0, metadata = index, key = f"-CHOICE-{index}"))
+        line.append(sGUI.Button("", image_data = img_data(resource_path(full_preview_list[index].pictures["portrait"]), chara_baseSize), button_color = (sGUI.theme_background_color(), sGUI.theme_background_color()), border_width = 0, disabled = True if index in chara_preview_list else False, metadata = index, key = f"-CHOICE-{index}"))
     table.append(line)
 
     popup_layout = [
@@ -90,9 +93,6 @@ def choose_chara_popup(preview_index: int):
     return popup
 
 if __name__ == "__main__" :
-    print(full_preview_list[0].pictures["portrait"])
-    #chara_size = (int(chara_baseSize * img.size[0] / img.size[1]), chara_baseSize)
-    #print(img.size, img.size[0]/img.size[1], "|", chara_baseSize, "=>", chara_size, chara_size[0]/chara_size[1])
 
     preview0 = [
         [
@@ -128,7 +128,7 @@ if __name__ == "__main__" :
     layout = [
         [sGUI.Text("Button Grid")],
         [sGUI.Column(preview0, visible = True, justification = "center", key = "COL0"), sGUI.Column(preview1, visible = False, justification = "center", key = "COL1"), sGUI.Column(preview2, visible = False, justification = "center", key = "COL2"), sGUI.Column(preview3, visible = False, justification = "center", key = "COL3")],
-       # [sGUI.Frame("", layout = table, pad = (0, 0), expand_x = True, expand_y = True)]
+        [sGUI.Frame("", layout = [[sGUI.Image(data = img_data(resource_path("noelle_party.png")), expand_x = True, key = "PARTY IMAGE")]], expand_x = True)]
     ]
 
     # Resource window icon
@@ -161,6 +161,7 @@ if __name__ == "__main__" :
             break
         elif (regex.match(over_pattern, event)):
             index = int(regex.findall("\d", event)[0])
+            update_information(window, index)
             print(f"{PrintColors.FAIL}ToDo: Update display stats -------- !!!!! Nedd to be stop while popup is open{PrintColors.ENDC}")
         elif (regex.match(chara_pattern, event)):
             chara_index = regex.findall("\d", event)
@@ -183,7 +184,7 @@ if __name__ == "__main__" :
             window[f"COL{preview_index}"].update(visible = True)
         elif (event == TIMEOUT_KEY):
             if (popup != None):
-                popup_event, popup_values = popup.read(0)
+                popup_event, popup_values = popup.read(100)
 
                 #print(f"POPUP => {popup_event}: {popup_values}")
                 choice_pattern = "^-CHOICE-"
@@ -191,16 +192,11 @@ if __name__ == "__main__" :
                     popup.close()
                     popup = None
                 elif (regex.match(choice_pattern, popup_event)):
-                    print(chara_index, preview_index)
-                    if (chara_add):
-                        window.write_event_value("-ADD-", popup[popup_event].metadata)
-                    else:
-                        window.write_event_value("-CHANGE-", popup[popup_event].metadata)
+                    window.write_event_value("-ADD-" if chara_add else "-CHANGE-", popup[popup_event].metadata)
                     popup.close()
                     popup = None
                 elif (regex.match(delete_pattern, popup_event)):
-                    if (not chara_add):
-                        window.write_event_value("-DELETE-", None)
+                    if (not chara_add): window.write_event_value("-DELETE-", None)
                     popup.close()
                     popup = None
                 else:
