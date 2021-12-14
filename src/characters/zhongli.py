@@ -9,33 +9,26 @@ from src.characters.characterClass import BaseCharacter
 class Zhongli(BaseCharacter):
     def __init__(self):
         super().__init__()
-        self.name = "Zhongli"
+        self._name = "Albedo"
         
         #Graphics used for interfaces
-        self.pictures["portrait"]           = "zhongli.png"
-        self.pictures["banner"]             = "zhongli_party.png"
-        self.pictures["abilities"][0]       = "polearm.png"
-        self.pictures["abilities"][1]       = "polearm.png"
-        self.pictures["abilities"][2]       = "polearm.png"
-        self.pictures["passives"][0]        = "polearm.png"
-        self.pictures["passives"][1]        = "polearm.png"
-        self.pictures["passives"][2]        = "polearm.png"
-        self.pictures["constellations"][0]  = "polearm.png"
-        self.pictures["constellations"][1]  = "polearm.png"
-        self.pictures["constellations"][2]  = "polearm.png"
-        self.pictures["constellations"][3]  = "polearm.png"
-        self.pictures["constellations"][4]  = "polearm.png"
-        self.pictures["constellations"][5]  = "polearm.png"
+        self._pictures["portrait"]          = "zhongli.png"
+        self._pictures["banner"]            = "zhongli_party.png"
+        self._pictures["abilities"][0]      = "polearm.png"
+        self._pictures["abilities"][1]      = "polearm.png"
+        self._pictures["abilities"][2]      = "polearm.png"
+        self._pictures["passives"][0]       = "polearm.png"
+        self._pictures["passives"][1]       = "polearm.png"
+        self._pictures["passives"][2]       = "polearm.png"
+        self._pictures["constellations"][0] = "polearm.png"
+        self._pictures["constellations"][1] = "polearm.png"
+        self._pictures["constellations"][2] = "polearm.png"
+        self._pictures["constellations"][3] = "polearm.png"
+        self._pictures["constellations"][4] = "polearm.png"
+        self._pictures["constellations"][5] = "polearm.png"
 
         #Enregistrement des statistiques au niveau 1
-        self.rarity = 5
-        baseStats = dict()
-        baseStats["hp"] = 1001
-        baseStats["atk"] = 18
-        baseStats["def"] = 75
-        baseStats["crit rate"] = 0.05
-        baseStats["crit dmg"] = 0.5
-        self.baseStats = baseStats
+        self._rarity = 5
 
         #Enregistrement des increases au niveau de personnage i+1 (0 au rang 0)
 
@@ -92,13 +85,30 @@ class Zhongli(BaseCharacter):
         critRateIncreases[70:79]  = [0.194 for _ in range(70, 79)]
         critRateIncreases[80:89]  = [0.242 for _ in range(80, 89)]
 
-        self.statsAtLevel = {
-            "hp" : hpIncreases,
-            "atk" : atkIncreases,
-            "def" : defIncreases,
-            "crit rate" : critRateIncreases,
-            "crit dmg" : critDmgIncreases,
+        self._baseStats = {
+            "Health"                : hpIncreases, # x90
+            "Attack"                : atkIncreases, # x90
+            "Defense"               : defIncreases, # x90
+            "Critical Rate"         : critRateIncreases, # x90
+            "Critical Damage"       : critDmgIncreases, # x90
+            "Energy Mastery"        : [0 for _ in range(90)], # x90
+            "Energy Recharge"       : [0 for _ in range(90)], # x90
+            "Physical Damage"       : [0 for _ in range(90)], # x90
+            "Physical Resistance"   : [0 for _ in range(90)], # x90
+            "Geo Damage"            : [0 for _ in range(90)], # x90
+            "Geo Resistance"        : [0 for _ in range(90)], # x90
+            "Pyro Damage"           : [0 for _ in range(90)], # x90
+            "Pyro Resistance"       : [0 for _ in range(90)], # x90
+            "Cryo Damage"           : [0 for _ in range(90)], # x90
+            "Cryo Resistance"       : [0 for _ in range(90)], # x90
+            "Hydro Damage"          : [0 for _ in range(90)], # x90
+            "Hydro Resistance"      : [0 for _ in range(90)], # x90
+            "Anemo Damage"          : [0 for _ in range(90)], # x90
+            "Anemo Resistance"      : [0 for _ in range(90)], # x90
+            "Dendro Damage"         : [0 for _ in range(90)], # x90
+            "Dendro Resistance"     : [0 for _ in range(90)], # x90
+            "Electro Damage"        : [0 for _ in range(90)], # x90
+            "Electro Resistance"    : [0 for _ in range(90)], # x90
         }
-
         
         #TODO

@@ -3,7 +3,7 @@ import re as regex
 
 from PIL import Image
 import PySimpleGUI as sGUI
-from PySimpleGUI.PySimpleGUI import TIMEOUT_KEY, TRANSPARENT_BUTTON
+from PySimpleGUI.PySimpleGUI import TIMEOUT_KEY
 
 from src.characters import *
 from src.characters.characterClass import BaseCharacter
@@ -28,6 +28,11 @@ chara_size = (100, 120)
 party_Size = (380, 100)
 background_color = "#3e4557"
 text_color = "#e5d6b6"
+#full_preview_list = []
+#for i in range(len(character_list)):
+#    print(i, character_list[i])
+#    if (character_list[i] != BaseCharacter and character_list[i] != Voyager):
+#        full_preview_list.append(character_list[i]())        
 full_preview_list = [character_list[i]() for i in range(len(character_list)) if (character_list[i] != BaseCharacter and character_list[i] != Voyager)]
 full_preview_list.append(Voyager())
 chara_preview_list = [len(full_preview_list)-1, None, None, None]
@@ -96,147 +101,155 @@ def choose_chara_popup(preview_index: int):
     return popup
 
 if __name__ == "__main__" :
-
-    preview0 = [
-        [
-            sGUI.Button("", image_data = img_data(resource_path("voyager.png"), chara_size), image_size = chara_size, border_width = (0, 0), use_ttk_buttons = True, button_color = background_color, key = f"-CHARA{0}-0"),
-            sGUI.Button("", image_data = img_data(resource_path("new.png"), chara_size), image_size = chara_size, border_width = (0, 0), use_ttk_buttons = True, button_color = background_color, key = f"-CHARA{1}-")
-        ]
-    ]
-    preview1 = [
-        [
-            sGUI.Button("", image_data = img_data(resource_path("voyager.png"), chara_size), image_size = chara_size, border_width = (0, 0), use_ttk_buttons = True, button_color = background_color, key = f"-CHARA{0}-1"),
-            sGUI.Button("", image_data = img_data(resource_path("voyager.png"), chara_size), image_size = chara_size, border_width = (0, 0), use_ttk_buttons = True, button_color = background_color, key = f"-CHARA{1}-1"),
-            sGUI.Button("", image_data = img_data(resource_path("new.png"), chara_size), image_size = chara_size, border_width = (0, 0), use_ttk_buttons = True, button_color = background_color, key = f"-CHARA{2}-")
-        ]
-    ]
-    preview2 = [
-        [
-            sGUI.Button("", image_data = img_data(resource_path("voyager.png"), chara_size), image_size = chara_size, border_width = (0, 0), use_ttk_buttons = True, button_color = background_color, key = f"-CHARA{0}-2"),
-            sGUI.Button("", image_data = img_data(resource_path("voyager.png"), chara_size), image_size = chara_size, border_width = (0, 0), use_ttk_buttons = True, button_color = background_color, key = f"-CHARA{1}-2"),
-            sGUI.Button("", image_data = img_data(resource_path("voyager.png"), chara_size), image_size = chara_size, border_width = (0, 0), use_ttk_buttons = True, button_color = background_color, key = f"-CHARA{2}-2"),
-            sGUI.Button("", image_data = img_data(resource_path("new.png"), chara_size), image_size = chara_size, border_width = (0, 0), use_ttk_buttons = True, button_color = background_color, key = f"-CHARA{3}-")
-        ]
-    ]
-    preview3 = [
-        [
-            sGUI.Button("", image_data = img_data(resource_path("voyager.png"), chara_size), image_size = chara_size, border_width = (0, 0), use_ttk_buttons = True, button_color = background_color, key = f"-CHARA{0}-3"),
-            sGUI.Button("", image_data = img_data(resource_path("voyager.png"), chara_size), image_size = chara_size, border_width = (0, 0), use_ttk_buttons = True, button_color = background_color, key = f"-CHARA{1}-3"),
-            sGUI.Button("", image_data = img_data(resource_path("voyager.png"), chara_size), image_size = chara_size, border_width = (0, 0), use_ttk_buttons = True, button_color = background_color, key = f"-CHARA{2}-3"),
-            sGUI.Button("", image_data = img_data(resource_path("voyager.png"), chara_size), image_size = chara_size, border_width = (0, 0), use_ttk_buttons = True, button_color = background_color, key = f"-CHARA{3}-3"),
-        ]
-    ]
-    previews = [preview0, preview1, preview2, preview3]
-
-    tab0 = [
-        [sGUI.Text(text = "Stats", background_color = background_color)]
-    ]
-    tab1 = [
-        [sGUI.Text(text = "Weapons", background_color = background_color)]
-    ]
-    tab2 = [
-        [sGUI.Text(text = "Artifacts", background_color = background_color)]
-    ]
-    tabs = [tab0, tab1, tab2]
-
-    tab_layout = [
-        [
-            sGUI.Button("Stats", button_color = background_color, key = "-TAB0-"),
-            sGUI.Button("Weapon", button_color = background_color, key = "-TAB1-"),
-            sGUI.Button("Artefacts", button_color = background_color, key = "-TAB2-")
-        ]
-    ]
-
-    layout = [
-        [sGUI.Input(visible = False)],
-        [sGUI.Text("Button Grid", background_color = background_color)],
-        [sGUI.Column(preview0, visible = True, justification = "center", key = "PREV0"), sGUI.Column(preview1, visible = False, justification = "center", key = "PREV1"), sGUI.Column(preview2, visible = False, justification = "center", key = "PREV2"), sGUI.Column(preview3, visible = False, justification = "center", key = "PREV3")],
-        [sGUI.Text("Voyager M/F", font = ('Arial', 16, 'bold'), background_color = background_color, text_color = text_color, pad = (20, 0, 0, 0), key = "CHARA NAME"), sGUI.Stretch(background_color = background_color), sGUI.Image(data = img_data(resource_path("voyager_party.png"), party_Size), background_color = background_color, key = "PARTY IMAGE")],
-        [sGUI.HSeparator(color = "#4A4A4A")],
-        [sGUI.Column(tab_layout, justification = "center", key = "TABS")],
-        [sGUI.HSeparator(color = "#4A4A4A")],
-        [sGUI.Column(tab0, visible = True, justification = "center", key = "TAB0"), sGUI.Column(tab1, visible = False, justification = "center", key = "TAB1"), sGUI.Column(tab2, visible = False, justification = "center", key = "TAB2")]
-    ]
-
-    # Resource window icon
-    if (sys.platform.startswith("win")):
-        window_icon = resource_path("icon.ico")
+    if True:
+        character = Itto()
+        print(character._pictures)
+        print(character.stats)
+        character.level = 1
+        print(character.baseStats)
+        character.level = 90
+        print(character.baseStats)
     else:
-        window_icon = resource_path("icon.png")
+        preview0 = [
+            [
+                sGUI.Button("", image_data = img_data(resource_path("voyager.png"), chara_size), image_size = chara_size, border_width = (0, 0), use_ttk_buttons = True, button_color = background_color, key = f"-CHARA{0}-0"),
+                sGUI.Button("", image_data = img_data(resource_path("new.png"), chara_size), image_size = chara_size, border_width = (0, 0), use_ttk_buttons = True, button_color = background_color, key = f"-CHARA{1}-")
+            ]
+        ]
+        preview1 = [
+            [
+                sGUI.Button("", image_data = img_data(resource_path("voyager.png"), chara_size), image_size = chara_size, border_width = (0, 0), use_ttk_buttons = True, button_color = background_color, key = f"-CHARA{0}-1"),
+                sGUI.Button("", image_data = img_data(resource_path("voyager.png"), chara_size), image_size = chara_size, border_width = (0, 0), use_ttk_buttons = True, button_color = background_color, key = f"-CHARA{1}-1"),
+                sGUI.Button("", image_data = img_data(resource_path("new.png"), chara_size), image_size = chara_size, border_width = (0, 0), use_ttk_buttons = True, button_color = background_color, key = f"-CHARA{2}-")
+            ]
+        ]
+        preview2 = [
+            [
+                sGUI.Button("", image_data = img_data(resource_path("voyager.png"), chara_size), image_size = chara_size, border_width = (0, 0), use_ttk_buttons = True, button_color = background_color, key = f"-CHARA{0}-2"),
+                sGUI.Button("", image_data = img_data(resource_path("voyager.png"), chara_size), image_size = chara_size, border_width = (0, 0), use_ttk_buttons = True, button_color = background_color, key = f"-CHARA{1}-2"),
+                sGUI.Button("", image_data = img_data(resource_path("voyager.png"), chara_size), image_size = chara_size, border_width = (0, 0), use_ttk_buttons = True, button_color = background_color, key = f"-CHARA{2}-2"),
+                sGUI.Button("", image_data = img_data(resource_path("new.png"), chara_size), image_size = chara_size, border_width = (0, 0), use_ttk_buttons = True, button_color = background_color, key = f"-CHARA{3}-")
+            ]
+        ]
+        preview3 = [
+            [
+                sGUI.Button("", image_data = img_data(resource_path("voyager.png"), chara_size), image_size = chara_size, border_width = (0, 0), use_ttk_buttons = True, button_color = background_color, key = f"-CHARA{0}-3"),
+                sGUI.Button("", image_data = img_data(resource_path("voyager.png"), chara_size), image_size = chara_size, border_width = (0, 0), use_ttk_buttons = True, button_color = background_color, key = f"-CHARA{1}-3"),
+                sGUI.Button("", image_data = img_data(resource_path("voyager.png"), chara_size), image_size = chara_size, border_width = (0, 0), use_ttk_buttons = True, button_color = background_color, key = f"-CHARA{2}-3"),
+                sGUI.Button("", image_data = img_data(resource_path("voyager.png"), chara_size), image_size = chara_size, border_width = (0, 0), use_ttk_buttons = True, button_color = background_color, key = f"-CHARA{3}-3"),
+            ]
+        ]
+        previews = [preview0, preview1, preview2, preview3]
 
-    # Create main Window
-    window = sGUI.Window("Genshin Impact ToolBox", layout, icon = window_icon, titlebar_icon = window_icon, size = window_size, margins = (0, 0), element_padding = (0, 0), use_ttk_buttons = True, use_default_focus = False, background_color = background_color, resizable = True, finalize = True)
+        tab0 = [
+            [sGUI.Text(text = "Stats", background_color = background_color)]
+        ]
+        tab1 = [
+            [sGUI.Text(text = "Weapons", background_color = background_color)]
+        ]
+        tab2 = [
+            [sGUI.Text(text = "Artifacts", background_color = background_color)]
+        ]
+        tabs = [tab0, tab1, tab2]
 
-    # Bind overing event for character preview
-    [[window[f"-CHARA{index}-{preview_index}"].bind("<Enter>", "+OVER+") for preview_index in range(index, len(previews))] for index in range(len(previews))]
-    [[window[f"-CHARA{index}-{preview_index}"].Widget.configure(takefocus = 0)  for preview_index in range(index, len(previews))] for index in range(len(previews))]
-    #[window[f"-TAB{index}-"].Widget.configure(focuscolor = "#FFFFFF00") for index in range(len(tabs))]
+        tab_layout = [
+            [
+                sGUI.Button("Stats", button_color = background_color, key = "-TAB0-"),
+                sGUI.Button("Weapon", button_color = background_color, key = "-TAB1-"),
+                sGUI.Button("Artefacts", button_color = background_color, key = "-TAB2-")
+            ]
+        ]
 
-    preview_index = 0
-    chara_index = None
-    chara_add = False
-    add_pattern = "^-ADD-"
-    chara_pattern = "^-CHARA\d-"
-    change_pattern = "^-CHANGE-"
-    delete_pattern = "^-DELETE-"
-    over_pattern = ".*[+]OVER[+]"
-    tab_pattern = "^-TAB\d-"
-    # Create an event loop
-    while True:
-        event, values = window.read(100)
+        layout = [
+            [sGUI.Input(visible = False)],
+            [sGUI.Text("Button Grid", background_color = background_color)],
+            [sGUI.Column(preview0, visible = True, justification = "center", key = "PREV0"), sGUI.Column(preview1, visible = False, justification = "center", key = "PREV1"), sGUI.Column(preview2, visible = False, justification = "center", key = "PREV2"), sGUI.Column(preview3, visible = False, justification = "center", key = "PREV3")],
+            [sGUI.Text("Voyager M/F", font = ('Arial', 16, 'bold'), background_color = background_color, text_color = text_color, pad = (20, 0, 0, 0), key = "CHARA NAME"), sGUI.Stretch(background_color = background_color), sGUI.Image(data = img_data(resource_path("voyager_party.png"), party_Size), background_color = background_color, key = "PARTY IMAGE")],
+            [sGUI.HSeparator(color = "#4A4A4A")],
+            [sGUI.Column(tab_layout, justification = "center", key = "TABS")],
+            [sGUI.HSeparator(color = "#4A4A4A")],
+            [sGUI.Column(tab0, visible = True, justification = "center", key = "TAB0"), sGUI.Column(tab1, visible = False, justification = "center", key = "TAB1"), sGUI.Column(tab2, visible = False, justification = "center", key = "TAB2")]
+        ]
 
-        #print(f"WINDOW => {event}: {values}")
-        # End program if user closes window or presses the OK button
-        if (event == sGUI.WIN_CLOSED):
-            break
-        elif (regex.match(over_pattern, event)):
-            index = int(regex.findall("\d", event)[0])
-            update_information(window, index)
-            print(f"{PrintColors.WARNING}ToDo: Update display stats -------- !!!!! Need to be stop while popup is open{PrintColors.ENDC}")
-        elif (regex.match(chara_pattern, event)):
-            chara_index = regex.findall("\d", event)
-            chara_add = len(chara_index) == 1
-            chara_index = int(chara_index[0])
-            popup = choose_chara_popup(preview_index + (1 if chara_add else 0))
-        elif (regex.match(change_pattern, event)):
-            chara_preview_list[chara_index] = values[event]
-            update_preview(window = window, source_index = preview_index, dest_index = preview_index)
-            update_information(window, chara_index)
-        elif (regex.match(add_pattern, event)):
-            chara_preview_list[chara_index] = values[event]
-            window[f"PREV{preview_index}"].update(visible = False)
-            update_preview(window = window, source_index = preview_index, dest_index = preview_index + 1)
-            preview_index += 1
-            window[f"PREV{preview_index}"].update(visible = True)
-            update_information(window, chara_index)
-        elif (regex.match(delete_pattern, event)):
-            window[f"PREV{preview_index}"].update(visible = False)
-            update_preview(window = window, source_index = preview_index, dest_index = preview_index - 1, remove_index = chara_index)
-            preview_index -= 1
-            window[f"PREV{preview_index}"].update(visible = True)
-            update_information(window, 0)
-        elif (regex.match(tab_pattern, event)):
-            tab_index = int(regex.findall("\d", event)[0])
-            [window[f"TAB{index}"].update(visible = (index == tab_index)) for index in range(0, len(tabs))]
-        elif (event == TIMEOUT_KEY):
-            if (popup != None):
-                popup_event, popup_values = popup.read(100)
+        # Resource window icon
+        if (sys.platform.startswith("win")):
+            window_icon = resource_path("icon.ico")
+        else:
+            window_icon = resource_path("icon.png")
 
-                #print(f"POPUP => {popup_event}: {popup_values}")
-                choice_pattern = "^-CHOICE-"
-                if (popup_event == "-EXIT-"):
-                    popup.close()
-                    popup = None
-                elif (regex.match(choice_pattern, popup_event)):
-                    index = int(regex.findall("\d", popup_event)[0])
-                    window.write_event_value("-ADD-" if chara_add else "-CHANGE-", index)
-                    popup.close()
-                    popup = None
-                elif (regex.match(delete_pattern, popup_event)):
-                    if (not chara_add): window.write_event_value("-DELETE-", None)
-                    popup.close()
-                    popup = None
-                else:
-                    pass
+        # Create main Window
+        window = sGUI.Window("Genshin Impact ToolBox", layout, icon = window_icon, titlebar_icon = window_icon, size = window_size, margins = (0, 0), element_padding = (0, 0), use_ttk_buttons = True, use_default_focus = False, background_color = background_color, resizable = True, finalize = True)
 
-    window.close()
+        # Bind overing event for character preview
+        [[window[f"-CHARA{index}-{preview_index}"].bind("<Enter>", "+OVER+") for preview_index in range(index, len(previews))] for index in range(len(previews))]
+        [[window[f"-CHARA{index}-{preview_index}"].Widget.configure(takefocus = 0)  for preview_index in range(index, len(previews))] for index in range(len(previews))]
+        #[window[f"-TAB{index}-"].Widget.configure(focuscolor = "#FFFFFF00") for index in range(len(tabs))]
+
+        preview_index = 0
+        chara_index = None
+        chara_add = False
+        add_pattern = "^-ADD-"
+        chara_pattern = "^-CHARA\d-"
+        change_pattern = "^-CHANGE-"
+        delete_pattern = "^-DELETE-"
+        over_pattern = ".*[+]OVER[+]"
+        tab_pattern = "^-TAB\d-"
+        # Create an event loop
+        while True:
+            event, values = window.read(100)
+
+            #print(f"WINDOW => {event}: {values}")
+            # End program if user closes window or presses the OK button
+            if (event == sGUI.WIN_CLOSED):
+                break
+            elif (regex.match(over_pattern, event)):
+                index = int(regex.findall("\d", event)[0])
+                update_information(window, index)
+                print(f"{PrintColors.WARNING}ToDo: Update display stats -------- !!!!! Need to be stop while popup is open{PrintColors.ENDC}")
+            elif (regex.match(chara_pattern, event)):
+                chara_index = regex.findall("\d", event)
+                chara_add = len(chara_index) == 1
+                chara_index = int(chara_index[0])
+                popup = choose_chara_popup(preview_index + (1 if chara_add else 0))
+            elif (regex.match(change_pattern, event)):
+                chara_preview_list[chara_index] = values[event]
+                update_preview(window = window, source_index = preview_index, dest_index = preview_index)
+                update_information(window, chara_index)
+            elif (regex.match(add_pattern, event)):
+                chara_preview_list[chara_index] = values[event]
+                window[f"PREV{preview_index}"].update(visible = False)
+                update_preview(window = window, source_index = preview_index, dest_index = preview_index + 1)
+                preview_index += 1
+                window[f"PREV{preview_index}"].update(visible = True)
+                update_information(window, chara_index)
+            elif (regex.match(delete_pattern, event)):
+                window[f"PREV{preview_index}"].update(visible = False)
+                update_preview(window = window, source_index = preview_index, dest_index = preview_index - 1, remove_index = chara_index)
+                preview_index -= 1
+                window[f"PREV{preview_index}"].update(visible = True)
+                update_information(window, 0)
+            elif (regex.match(tab_pattern, event)):
+                tab_index = int(regex.findall("\d", event)[0])
+                [window[f"TAB{index}"].update(visible = (index == tab_index)) for index in range(0, len(tabs))]
+            elif (event == TIMEOUT_KEY):
+                if (popup != None):
+                    popup_event, popup_values = popup.read(100)
+
+                    #print(f"POPUP => {popup_event}: {popup_values}")
+                    choice_pattern = "^-CHOICE-"
+                    if (popup_event == "-EXIT-"):
+                        popup.close()
+                        popup = None
+                    elif (regex.match(choice_pattern, popup_event)):
+                        index = int(regex.findall("\d", popup_event)[0])
+                        window.write_event_value("-ADD-" if chara_add else "-CHANGE-", index)
+                        popup.close()
+                        popup = None
+                    elif (regex.match(delete_pattern, popup_event)):
+                        if (not chara_add): window.write_event_value("-DELETE-", None)
+                        popup.close()
+                        popup = None
+                    else:
+                        pass
+
+        window.close()

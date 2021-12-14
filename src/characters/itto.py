@@ -9,34 +9,34 @@ from src.characters.characterClass import BaseCharacter
 class Itto(BaseCharacter):
     def __init__(self):
         super().__init__()
-        self.name = "Arataki Itto"
+        self._name = "Albedo"
         
         #Graphics used for interfaces
-        self.pictures["portrait"]           = "itto.png"
-        self.pictures["banner"]             = "itto_party.png"
-        self.pictures["abilities"][0]       = "great_sword.png"
-        self.pictures["abilities"][1]       = "great_sword.png"
-        self.pictures["abilities"][2]       = "great_sword.png"
-        self.pictures["passives"][0]        = "great_sword.png"
-        self.pictures["passives"][1]        = "great_sword.png"
-        self.pictures["passives"][2]        = "great_sword.png"
-        self.pictures["constellations"][0]  = "great_sword.png"
-        self.pictures["constellations"][1]  = "great_sword.png"
-        self.pictures["constellations"][2]  = "great_sword.png"
-        self.pictures["constellations"][3]  = "great_sword.png"
-        self.pictures["constellations"][4]  = "great_sword.png"
-        self.pictures["constellations"][5]  = "great_sword.png"
+        self._pictures["portrait"]          = "itto.png"
+        self._pictures["banner"]            = "itto_party.png"
+        self._pictures["abilities"][0]      = "great_sword.png"
+        self._pictures["abilities"][1]      = "great_sword.png"
+        self._pictures["abilities"][2]      = "great_sword.png"
+        self._pictures["passives"][0]       = "great_sword.png"
+        self._pictures["passives"][1]       = "great_sword.png"
+        self._pictures["passives"][2]       = "great_sword.png"
+        self._pictures["constellations"][0] = "great_sword.png"
+        self._pictures["constellations"][1] = "great_sword.png"
+        self._pictures["constellations"][2] = "great_sword.png"
+        self._pictures["constellations"][3] = "great_sword.png"
+        self._pictures["constellations"][4] = "great_sword.png"
+        self._pictures["constellations"][5] = "great_sword.png"
 
         #Enregistrement des statistiques au niveau 1
-        self.rarity = 5
+        self._rarity = 5
 
         #Enregistrement des increases au niveau de personnage i+1 (0 au rang 0)
 
-        hpIncreases = [1001 for _ in range(89)]
-        atkIncreases = [18 for _ in range(89)]
-        defIncreases = [75 for _ in range(89)]
-        critRateIncreases = [0.05 for _ in range(89)]
-        critDmgIncreases = [0.50 for _ in range(89)]
+        hpIncreases = [1001 for _ in range(90)]
+        atkIncreases = [18 for _ in range(90)]
+        defIncreases = [75 for _ in range(90)]
+        critRateIncreases = [0.05 for _ in range(90)]
+        critDmgIncreases = [0.50 for _ in range(90)]
 
         hpIncreases[1:19]  = [2597 for _ in range(1, 19)]
         hpIncreases[20]    = 3455
@@ -85,13 +85,30 @@ class Itto(BaseCharacter):
         critRateIncreases[70:79]  = [0.194 for _ in range(70, 79)]
         critRateIncreases[80:89]  = [0.242 for _ in range(80, 89)]
 
-        self.statsAtLevel = {
-            "hp" : hpIncreases,
-            "atk" : atkIncreases,
-            "def" : defIncreases,
-            "crit rate" : critRateIncreases,
-            "crit dmg" : critDmgIncreases,
+        self._baseStats = {
+            "Health"                : hpIncreases, # x90
+            "Attack"                : atkIncreases, # x90
+            "Defense"               : defIncreases, # x90
+            "Critical Rate"         : critRateIncreases, # x90
+            "Critical Damage"       : critDmgIncreases, # x90
+            "Energy Mastery"        : [0 for _ in range(90)], # x90
+            "Energy Recharge"       : [0 for _ in range(90)], # x90
+            "Physical Damage"       : [0 for _ in range(90)], # x90
+            "Physical Resistance"   : [0 for _ in range(90)], # x90
+            "Geo Damage"            : [0 for _ in range(90)], # x90
+            "Geo Resistance"        : [0 for _ in range(90)], # x90
+            "Pyro Damage"           : [0 for _ in range(90)], # x90
+            "Pyro Resistance"       : [0 for _ in range(90)], # x90
+            "Cryo Damage"           : [0 for _ in range(90)], # x90
+            "Cryo Resistance"       : [0 for _ in range(90)], # x90
+            "Hydro Damage"          : [0 for _ in range(90)], # x90
+            "Hydro Resistance"      : [0 for _ in range(90)], # x90
+            "Anemo Damage"          : [0 for _ in range(90)], # x90
+            "Anemo Resistance"      : [0 for _ in range(90)], # x90
+            "Dendro Damage"         : [0 for _ in range(90)], # x90
+            "Dendro Resistance"     : [0 for _ in range(90)], # x90
+            "Electro Damage"        : [0 for _ in range(90)], # x90
+            "Electro Resistance"    : [0 for _ in range(90)], # x90
         }
-
         
         #TODO
