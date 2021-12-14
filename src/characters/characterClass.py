@@ -72,7 +72,7 @@ class BaseCharacter():
         if level > 90:
             level = 90
         elif level < 1:
-            level = 0
+            level = 1
 
         ret = dict()
         ret["hp"] = self.statsAtLevel["hp"][level-1]
