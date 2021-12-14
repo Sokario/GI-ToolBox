@@ -3,7 +3,7 @@ import re as regex
 
 from PIL import Image
 import PySimpleGUI as sGUI
-from PySimpleGUI.PySimpleGUI import TIMEOUT_KEY
+from PySimpleGUI.PySimpleGUI import TIMEOUT_KEY, TRANSPARENT_BUTTON
 
 from src.characters import *
 from src.characters.characterClass import BaseCharacter
@@ -69,8 +69,6 @@ def update_preview(window: sGUI.Window, source_index: int, dest_index: int, remo
         chara_preview_list[index] = -1 if chara_preview_list[index] == None else chara_preview_list[index]
         window[f"-CHARA{index}-{dest_index}"].update(image_data = img_data(resource_path(full_preview_list[chara_preview_list[index]].pictures["portrait"]), chara_size))
         print(window[f"-CHARA{index}-{dest_index}"])
-    
-    print(chara_preview_list)
 
 def choose_chara_popup(preview_index: int):
     max_cols = 5
@@ -128,26 +126,36 @@ if __name__ == "__main__" :
             sGUI.Button("", image_data = img_data(resource_path("voyager.png"), chara_size), image_size = chara_size, border_width = (0, 0), use_ttk_buttons = True, button_color = background_color, key = f"-CHARA{3}-3"),
         ]
     ]
-    preview = [preview0, preview1, preview2, preview3]
+    previews = [preview0, preview1, preview2, preview3]
 
-    tab0_layout = [
+    tab0 = [
         [sGUI.Text(text = "Stats", background_color = background_color)]
     ]
-    tab1_layout = [
-        [sGUI.Text(text = "Equipments", background_color = background_color)]
+    tab1 = [
+        [sGUI.Text(text = "Weapons", background_color = background_color)]
+    ]
+    tab2 = [
+        [sGUI.Text(text = "Artifacts", background_color = background_color)]
+    ]
+    tabs = [tab0, tab1, tab2]
+
+    tab_layout = [
+        [
+            sGUI.Button("Stats", button_color = background_color, key = "-TAB0-"),
+            sGUI.Button("Weapon", button_color = background_color, key = "-TAB1-"),
+            sGUI.Button("Artefacts", button_color = background_color, key = "-TAB2-")
+        ]
     ]
 
-    tab_layout = [[
-        sGUI.Tab(title = "TAB 0", layout = tab0_layout, title_color = background_color, background_color = background_color),
-        sGUI.Tab(title = "TAB 1", layout = tab1_layout, title_color = background_color, background_color = background_color)
-    ]]
-
     layout = [
+        [sGUI.Input(visible = False)],
         [sGUI.Text("Button Grid", background_color = background_color)],
-        [sGUI.Column(preview0, visible = True, justification = "center", key = "COL0"), sGUI.Column(preview1, visible = False, justification = "center", key = "COL1"), sGUI.Column(preview2, visible = False, justification = "center", key = "COL2"), sGUI.Column(preview3, visible = False, justification = "center", key = "COL3")],
+        [sGUI.Column(preview0, visible = True, justification = "center", key = "PREV0"), sGUI.Column(preview1, visible = False, justification = "center", key = "PREV1"), sGUI.Column(preview2, visible = False, justification = "center", key = "PREV2"), sGUI.Column(preview3, visible = False, justification = "center", key = "PREV3")],
         [sGUI.Text("Voyager M/F", font = ('Arial', 16, 'bold'), background_color = background_color, text_color = text_color, pad = (20, 0, 0, 0), key = "CHARA NAME"), sGUI.Stretch(background_color = background_color), sGUI.Image(data = img_data(resource_path("voyager_party.png"), party_Size), background_color = background_color, key = "PARTY IMAGE")],
         [sGUI.HSeparator(color = "#4A4A4A")],
-        [sGUI.TabGroup(layout = tab_layout, tab_location = "top", expand_x = True, expand_y = True, background_color = background_color)]
+        [sGUI.Column(tab_layout, justification = "center", key = "TABS")],
+        [sGUI.HSeparator(color = "#4A4A4A")],
+        [sGUI.Column(tab0, visible = True, justification = "center", key = "TAB0"), sGUI.Column(tab1, visible = False, justification = "center", key = "TAB1"), sGUI.Column(tab2, visible = False, justification = "center", key = "TAB2")]
     ]
 
     # Resource window icon
@@ -160,9 +168,10 @@ if __name__ == "__main__" :
     window = sGUI.Window("Genshin Impact ToolBox", layout, icon = window_icon, titlebar_icon = window_icon, size = window_size, margins = (0, 0), element_padding = (0, 0), use_ttk_buttons = True, use_default_focus = False, background_color = background_color, resizable = True, finalize = True)
 
     # Bind overing event for character preview
-    [[window[f"-CHARA{index}-{preview_index}"].bind("<Enter>", "+OVER+") for preview_index in range(index, len(preview))] for index in range(len(preview))]
-    [[window[f"-CHARA{index}-{preview_index}"].Widget.configure(takefocus=0)  for preview_index in range(index, len(preview))] for index in range(len(preview))]
-    
+    [[window[f"-CHARA{index}-{preview_index}"].bind("<Enter>", "+OVER+") for preview_index in range(index, len(previews))] for index in range(len(previews))]
+    [[window[f"-CHARA{index}-{preview_index}"].Widget.configure(takefocus = 0)  for preview_index in range(index, len(previews))] for index in range(len(previews))]
+    #[window[f"-TAB{index}-"].Widget.configure(focuscolor = "#FFFFFF00") for index in range(len(tabs))]
+
     preview_index = 0
     chara_index = None
     chara_add = False
@@ -171,6 +180,7 @@ if __name__ == "__main__" :
     change_pattern = "^-CHANGE-"
     delete_pattern = "^-DELETE-"
     over_pattern = ".*[+]OVER[+]"
+    tab_pattern = "^-TAB\d-"
     # Create an event loop
     while True:
         event, values = window.read(100)
@@ -182,7 +192,7 @@ if __name__ == "__main__" :
         elif (regex.match(over_pattern, event)):
             index = int(regex.findall("\d", event)[0])
             update_information(window, index)
-            print(f"{PrintColors.FAIL}ToDo: Update display stats -------- !!!!! Nedd to be stop while popup is open{PrintColors.ENDC}")
+            print(f"{PrintColors.WARNING}ToDo: Update display stats -------- !!!!! Need to be stop while popup is open{PrintColors.ENDC}")
         elif (regex.match(chara_pattern, event)):
             chara_index = regex.findall("\d", event)
             chara_add = len(chara_index) == 1
@@ -194,17 +204,20 @@ if __name__ == "__main__" :
             update_information(window, chara_index)
         elif (regex.match(add_pattern, event)):
             chara_preview_list[chara_index] = values[event]
-            window[f"COL{preview_index}"].update(visible = False)
+            window[f"PREV{preview_index}"].update(visible = False)
             update_preview(window = window, source_index = preview_index, dest_index = preview_index + 1)
             preview_index += 1
-            window[f"COL{preview_index}"].update(visible = True)
+            window[f"PREV{preview_index}"].update(visible = True)
             update_information(window, chara_index)
         elif (regex.match(delete_pattern, event)):
-            window[f"COL{preview_index}"].update(visible = False)
+            window[f"PREV{preview_index}"].update(visible = False)
             update_preview(window = window, source_index = preview_index, dest_index = preview_index - 1, remove_index = chara_index)
             preview_index -= 1
-            window[f"COL{preview_index}"].update(visible = True)
+            window[f"PREV{preview_index}"].update(visible = True)
             update_information(window, 0)
+        elif (regex.match(tab_pattern, event)):
+            tab_index = int(regex.findall("\d", event)[0])
+            [window[f"TAB{index}"].update(visible = (index == tab_index)) for index in range(0, len(tabs))]
         elif (event == TIMEOUT_KEY):
             if (popup != None):
                 popup_event, popup_values = popup.read(100)
