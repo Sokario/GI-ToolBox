@@ -1,4 +1,3 @@
-from ctypes import alignment
 import os, sys, io
 import re as regex
 
@@ -69,6 +68,7 @@ def update_preview(window: sGUI.Window, source_index: int, dest_index: int, remo
     for index in range(0, dest_index + 1, 1):
         chara_preview_list[index] = -1 if chara_preview_list[index] == None else chara_preview_list[index]
         window[f"-CHARA{index}-{dest_index}"].update(image_data = img_data(resource_path(full_preview_list[chara_preview_list[index]].pictures["portrait"]), chara_size))
+        print(window[f"-CHARA{index}-{dest_index}"])
     
     print(chara_preview_list)
 
@@ -101,41 +101,53 @@ if __name__ == "__main__" :
 
     preview0 = [
         [
-            sGUI.Button("", image_data = img_data(resource_path("voyager.png"), chara_size), image_size = chara_size, border_width = (0, 0), button_color = background_color, key = f"-CHARA{0}-0"),
-            sGUI.Button("", image_data = img_data(resource_path("new.png"), chara_size), image_size = chara_size, border_width = (0, 0), button_color = background_color, key = f"-CHARA{1}-")
+            sGUI.Button("", image_data = img_data(resource_path("voyager.png"), chara_size), image_size = chara_size, border_width = (0, 0), use_ttk_buttons = True, button_color = background_color, key = f"-CHARA{0}-0"),
+            sGUI.Button("", image_data = img_data(resource_path("new.png"), chara_size), image_size = chara_size, border_width = (0, 0), use_ttk_buttons = True, button_color = background_color, key = f"-CHARA{1}-")
         ]
     ]
     preview1 = [
         [
-            sGUI.Button("", image_data = None, image_size = chara_size, border_width = (0, 0), button_color = background_color, key = f"-CHARA{0}-1"),
-            sGUI.Button("", image_data = None, image_size = chara_size, border_width = (0, 0), button_color = background_color, key = f"-CHARA{1}-1"),
-            sGUI.Button("", image_data = img_data(resource_path("new.png"), chara_size), image_size = chara_size, border_width = (0, 0), button_color = background_color, key = f"-CHARA{2}-")
+            sGUI.Button("", image_data = img_data(resource_path("voyager.png"), chara_size), image_size = chara_size, border_width = (0, 0), use_ttk_buttons = True, button_color = background_color, key = f"-CHARA{0}-1"),
+            sGUI.Button("", image_data = img_data(resource_path("voyager.png"), chara_size), image_size = chara_size, border_width = (0, 0), use_ttk_buttons = True, button_color = background_color, key = f"-CHARA{1}-1"),
+            sGUI.Button("", image_data = img_data(resource_path("new.png"), chara_size), image_size = chara_size, border_width = (0, 0), use_ttk_buttons = True, button_color = background_color, key = f"-CHARA{2}-")
         ]
     ]
     preview2 = [
         [
-            sGUI.Button("", image_data = None, image_size = chara_size, border_width = (0, 0), button_color = background_color, key = f"-CHARA{0}-2"),
-            sGUI.Button("", image_data = None, image_size = chara_size, border_width = (0, 0), button_color = background_color, key = f"-CHARA{1}-2"),
-            sGUI.Button("", image_data = None, image_size = chara_size, border_width = (0, 0), button_color = background_color, key = f"-CHARA{2}-2"),
-            sGUI.Button("", image_data = img_data(resource_path("new.png"), chara_size), image_size = chara_size, border_width = (0, 0), button_color = background_color, key = f"-CHARA{3}-")
+            sGUI.Button("", image_data = img_data(resource_path("voyager.png"), chara_size), image_size = chara_size, border_width = (0, 0), use_ttk_buttons = True, button_color = background_color, key = f"-CHARA{0}-2"),
+            sGUI.Button("", image_data = img_data(resource_path("voyager.png"), chara_size), image_size = chara_size, border_width = (0, 0), use_ttk_buttons = True, button_color = background_color, key = f"-CHARA{1}-2"),
+            sGUI.Button("", image_data = img_data(resource_path("voyager.png"), chara_size), image_size = chara_size, border_width = (0, 0), use_ttk_buttons = True, button_color = background_color, key = f"-CHARA{2}-2"),
+            sGUI.Button("", image_data = img_data(resource_path("new.png"), chara_size), image_size = chara_size, border_width = (0, 0), use_ttk_buttons = True, button_color = background_color, key = f"-CHARA{3}-")
         ]
     ]
     preview3 = [
         [
-            sGUI.Button("", image_data = None, image_size = chara_size, border_width = (0, 0), button_color = background_color, key = f"-CHARA{0}-3"),
-            sGUI.Button("", image_data = None, image_size = chara_size, border_width = (0, 0), button_color = background_color, key = f"-CHARA{1}-3"),
-            sGUI.Button("", image_data = None, image_size = chara_size, border_width = (0, 0), button_color = background_color, key = f"-CHARA{2}-3"),
-            sGUI.Button("", image_data = None, image_size = chara_size, border_width = (0, 0), button_color = background_color, key = f"-CHARA{3}-3"),
+            sGUI.Button("", image_data = img_data(resource_path("voyager.png"), chara_size), image_size = chara_size, border_width = (0, 0), use_ttk_buttons = True, button_color = background_color, key = f"-CHARA{0}-3"),
+            sGUI.Button("", image_data = img_data(resource_path("voyager.png"), chara_size), image_size = chara_size, border_width = (0, 0), use_ttk_buttons = True, button_color = background_color, key = f"-CHARA{1}-3"),
+            sGUI.Button("", image_data = img_data(resource_path("voyager.png"), chara_size), image_size = chara_size, border_width = (0, 0), use_ttk_buttons = True, button_color = background_color, key = f"-CHARA{2}-3"),
+            sGUI.Button("", image_data = img_data(resource_path("voyager.png"), chara_size), image_size = chara_size, border_width = (0, 0), use_ttk_buttons = True, button_color = background_color, key = f"-CHARA{3}-3"),
         ]
     ]
     preview = [preview0, preview1, preview2, preview3]
 
+    tab0_layout = [
+        [sGUI.Text(text = "Stats", background_color = background_color)]
+    ]
+    tab1_layout = [
+        [sGUI.Text(text = "Equipments", background_color = background_color)]
+    ]
+
+    tab_layout = [[
+        sGUI.Tab(title = "TAB 0", layout = tab0_layout, title_color = background_color, background_color = background_color),
+        sGUI.Tab(title = "TAB 1", layout = tab1_layout, title_color = background_color, background_color = background_color)
+    ]]
+
     layout = [
         [sGUI.Text("Button Grid", background_color = background_color)],
         [sGUI.Column(preview0, visible = True, justification = "center", key = "COL0"), sGUI.Column(preview1, visible = False, justification = "center", key = "COL1"), sGUI.Column(preview2, visible = False, justification = "center", key = "COL2"), sGUI.Column(preview3, visible = False, justification = "center", key = "COL3")],
-        [sGUI.HSeparator()],
-        [sGUI.Text("CHARACTER NAME", font = ('Arial', 16, 'bold'), background_color = background_color, text_color = text_color, pad = (20, 0, 0, 0), key = "CHARA NAME"), sGUI.Stretch(background_color = background_color), sGUI.Image(data = img_data(resource_path("voyager_party.png"), party_Size), background_color = background_color, key = "PARTY IMAGE")],
-        [sGUI.HSeparator()]
+        [sGUI.Text("Voyager M/F", font = ('Arial', 16, 'bold'), background_color = background_color, text_color = text_color, pad = (20, 0, 0, 0), key = "CHARA NAME"), sGUI.Stretch(background_color = background_color), sGUI.Image(data = img_data(resource_path("voyager_party.png"), party_Size), background_color = background_color, key = "PARTY IMAGE")],
+        [sGUI.HSeparator(color = "#4A4A4A")],
+        [sGUI.TabGroup(layout = tab_layout, tab_location = "top", expand_x = True, expand_y = True, background_color = background_color)]
     ]
 
     # Resource window icon
@@ -145,11 +157,12 @@ if __name__ == "__main__" :
         window_icon = resource_path("icon.png")
 
     # Create main Window
-    window = sGUI.Window("Genshin Impact ToolBox", layout, icon = window_icon, titlebar_icon = window_icon, size = window_size, margins = (0, 0), element_padding = (0, 0), use_ttk_buttons = True, background_color = background_color, resizable = True, finalize = True)
-    
+    window = sGUI.Window("Genshin Impact ToolBox", layout, icon = window_icon, titlebar_icon = window_icon, size = window_size, margins = (0, 0), element_padding = (0, 0), use_ttk_buttons = True, use_default_focus = False, background_color = background_color, resizable = True, finalize = True)
+
     # Bind overing event for character preview
     [[window[f"-CHARA{index}-{preview_index}"].bind("<Enter>", "+OVER+") for preview_index in range(index, len(preview))] for index in range(len(preview))]
-
+    [[window[f"-CHARA{index}-{preview_index}"].Widget.configure(takefocus=0)  for preview_index in range(index, len(preview))] for index in range(len(preview))]
+    
     preview_index = 0
     chara_index = None
     chara_add = False
