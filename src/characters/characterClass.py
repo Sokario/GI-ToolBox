@@ -63,7 +63,6 @@ class BaseCharacter():
         self.levelMaterials     = list()
         self.ascensionMaterials = list()
         self.abilityMaterials   = list()
-
         pass
 
     # Name property
@@ -369,15 +368,14 @@ class BaseCharacter():
 
     #Global baseStats property
     @property
-    def stats(self) -> dict:
+    def baseStatsGlobal(self) -> dict:
         return self._baseStats
 
     @property
-    def baseStats(self, level: int = 0) -> dict:
-        print(level)
+    def baseStats(self) -> dict:
+        return {key: self._baseStats[key][self._level - 1] for key in self._baseStats.keys()}
+
+    def baseStatsAtLevel(self, level: int = 0) -> dict:
         assert (0 <= level <= 90), "Character level need to be between 1 and 90"
         level = level if level != 0 else self._level
-        print(level)
-        for key in self._baseStats.keys():
-            print(len(self._baseStats[key]))
         return {key: self._baseStats[key][level - 1] for key in self._baseStats.keys()}

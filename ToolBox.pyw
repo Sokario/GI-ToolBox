@@ -104,11 +104,11 @@ if __name__ == "__main__" :
     if True:
         character = Itto()
         print(character._pictures)
-        print(character.stats)
+        print(character.baseStatsGlobal)
         character.level = 1
         print(character.baseStats)
         character.level = 90
-        print(character.baseStats)
+        print(character.baseStatsAtLevel(1))
     else:
         preview0 = [
             [
