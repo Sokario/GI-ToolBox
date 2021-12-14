@@ -9,7 +9,7 @@ from src.characters.characterClass import BaseCharacter
 class Voyager(BaseCharacter):
     def __init__(self):
         super().__init__()
-        self.name = "Voyager"
+        self.name = "Voyager M/F"
         
         #Graphics used for interfaces
         self.pictures["portrait"]           = "voyager.png"
