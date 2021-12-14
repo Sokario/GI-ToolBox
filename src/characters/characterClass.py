@@ -12,19 +12,43 @@ class BaseCharacter():
         
         #Graphics used for interfaces
         self.pictures = {
-            "portrait": None,
-            "banner": None,
-            "abilities": [None, None, None],
-            "passives": [None, None, None],
+            "portrait"      : None,
+            "banner"        : None,
+            "abilities"     : [None, None, None],
+            "passives"      : [None, None, None],
             "constellations": [None, None, None, None, None, None]
             }
 
-        self.rarity = 0
+        self.rarity = 4
         self.level = 1
 
         #self.baseStats = dict()
         #self.statIncreases = list() #Liste de dictionnaires taille max 90
-        self.statsAtLevel = dict() #dict de listes
+        self.statsAtLevel = {
+            "Health Points"     : [0 for _ in range(90)], # x90
+            "Attack"            : [0 for _ in range(90)], # x90
+            "Defense"           : [0 for _ in range(90)], # x90
+            "Critical Rate"     : [0 for _ in range(90)], # x90
+            "Critical Damage"   : [0 for _ in range(90)], # x90
+            "Energy Mastery"    : [0 for _ in range(90)], # x90
+            "Energy Recharge"   : [0 for _ in range(90)], # x90
+            "Physical Damage"   : [0 for _ in range(90)], # x90
+            "Physical Resitance": [0 for _ in range(90)], # x90
+            "Geo Damage"        : [0 for _ in range(90)], # x90
+            "Geo Resitance"     : [0 for _ in range(90)], # x90
+            "Pyro Damage"       : [0 for _ in range(90)], # x90
+            "Pyro Resitance"    : [0 for _ in range(90)], # x90
+            "Cryo Damage"       : [0 for _ in range(90)], # x90
+            "Cryo Resitance"    : [0 for _ in range(90)], # x90
+            "Hydro Damage"      : [0 for _ in range(90)], # x90
+            "Hydro Resitance"   : [0 for _ in range(90)], # x90
+            "Anemo Damage"      : [0 for _ in range(90)], # x90
+            "Anemo Resitance"   : [0 for _ in range(90)], # x90
+            "Dendro Damage"     : [0 for _ in range(90)], # x90
+            "Dendro Resitance"  : [0 for _ in range(90)], # x90
+            "Electro Damage"    : [0 for _ in range(90)], # x90
+            "Electro Resitance" : [0 for _ in range(90)], # x90
+        }
 
         self.attackSpeed = 0
         self.chargedAttackSpeed = 0
@@ -38,6 +62,7 @@ class BaseCharacter():
         self.artifacts = dict() #unused for now
         self.weapon = wc.BaseWeapon("none", "none") #weapon instance
 
+        self.levelMaterials     = list()
         self.ascensionMaterials = list()
         self.abilityMaterials   = list()
 
