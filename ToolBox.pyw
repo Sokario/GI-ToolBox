@@ -61,7 +61,7 @@ def img_data(filepath, size = None):
 
 def update_information(window: sGUI.Window, chara_index: int):
     window["CHARA NAME"].update(full_preview_list[chara_preview_list[chara_index]].name)
-    window["PARTY IMAGE"].update(data = img_data(resource_path(full_preview_list[chara_preview_list[chara_index]].pictures["banner"]), party_Size))
+    window["PARTY IMAGE"].update(data = img_data(resource_path(full_preview_list[chara_preview_list[chara_index]].banner), party_Size))
 
 def update_preview(window: sGUI.Window, source_index: int, dest_index: int, remove_index: int = None):
     if (remove_index != None and source_index > dest_index):
@@ -72,7 +72,7 @@ def update_preview(window: sGUI.Window, source_index: int, dest_index: int, remo
 
     for index in range(0, dest_index + 1, 1):
         chara_preview_list[index] = -1 if chara_preview_list[index] == None else chara_preview_list[index]
-        window[f"-CHARA{index}-{dest_index}"].update(image_data = img_data(resource_path(full_preview_list[chara_preview_list[index]].pictures["portrait"]), chara_size))
+        window[f"-CHARA{index}-{dest_index}"].update(image_data = img_data(resource_path(full_preview_list[chara_preview_list[index]].portrait), chara_size))
         print(window[f"-CHARA{index}-{dest_index}"])
 
 def choose_chara_popup(preview_index: int):
@@ -86,7 +86,7 @@ def choose_chara_popup(preview_index: int):
             if (len(line) != 0):
                 table.append(line)
             line = []
-        line.append(sGUI.Button("", image_data = img_data(resource_path(full_preview_list[index].pictures["portrait"]), chara_size), button_color = (sGUI.theme_background_color(), sGUI.theme_background_color()), border_width = 0, disabled = True if index in chara_preview_list else False, key = f"-CHOICE-{index}"))
+        line.append(sGUI.Button("", image_data = img_data(resource_path(full_preview_list[index].portrait), chara_size), button_color = (sGUI.theme_background_color(), sGUI.theme_background_color()), border_width = 0, disabled = True if index in chara_preview_list else False, key = f"-CHOICE-{index}"))
     table.append(line)
 
     popup_layout = [
@@ -101,7 +101,7 @@ def choose_chara_popup(preview_index: int):
     return popup
 
 if __name__ == "__main__" :
-    if True:
+    if False:
         character = Itto()
         print(character._pictures)
         print(character.baseStatsGlobal)
