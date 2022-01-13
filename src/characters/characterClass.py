@@ -25,29 +25,29 @@ class BaseCharacter():
         #self.baseStats = dict()
         #self.statIncreases = list() #Liste de dictionnaires taille max 90
         self._baseStats = {
-            "Health"                : [0 for _ in range(90)], # x90
-            "Attack"                : [0 for _ in range(90)], # x90
-            "Defense"               : [0 for _ in range(90)], # x90
-            "Critical Rate"         : [0 for _ in range(90)], # x90
-            "Critical Damage"       : [0 for _ in range(90)], # x90
-            "Energy Mastery"        : [0 for _ in range(90)], # x90
-            "Energy Recharge"       : [0 for _ in range(90)], # x90
-            "Physical Damage"       : [0 for _ in range(90)], # x90
-            "Physical Resistance"   : [0 for _ in range(90)], # x90
-            "Geo Damage"            : [0 for _ in range(90)], # x90
-            "Geo Resistance"        : [0 for _ in range(90)], # x90
-            "Pyro Damage"           : [0 for _ in range(90)], # x90
-            "Pyro Resistance"       : [0 for _ in range(90)], # x90
-            "Cryo Damage"           : [0 for _ in range(90)], # x90
-            "Cryo Resistance"       : [0 for _ in range(90)], # x90
-            "Hydro Damage"          : [0 for _ in range(90)], # x90
-            "Hydro Resistance"      : [0 for _ in range(90)], # x90
-            "Anemo Damage"          : [0 for _ in range(90)], # x90
-            "Anemo Resistance"      : [0 for _ in range(90)], # x90
-            "Dendro Damage"         : [0 for _ in range(90)], # x90
-            "Dendro Resistance"     : [0 for _ in range(90)], # x90
-            "Electro Damage"        : [0 for _ in range(90)], # x90
-            "Electro Resistance"    : [0 for _ in range(90)], # x90
+            "Health"                : [-1 for _ in range(90)], # x90
+            "Attack"                : [-1 for _ in range(90)], # x90
+            "Defense"               : [-1 for _ in range(90)], # x90
+            "Critical Rate"         : [-1 for _ in range(90)], # x90
+            "Critical Damage"       : [-1 for _ in range(90)], # x90
+            "Energy Mastery"        : [-1 for _ in range(90)], # x90
+            "Energy Recharge"       : [-1 for _ in range(90)], # x90
+            "Physical Damage"       : [-1 for _ in range(90)], # x90
+            "Physical Resistance"   : [-1 for _ in range(90)], # x90
+            "Geo Damage"            : [-1 for _ in range(90)], # x90
+            "Geo Resistance"        : [-1 for _ in range(90)], # x90
+            "Pyro Damage"           : [-1 for _ in range(90)], # x90
+            "Pyro Resistance"       : [-1 for _ in range(90)], # x90
+            "Cryo Damage"           : [-1 for _ in range(90)], # x90
+            "Cryo Resistance"       : [-1 for _ in range(90)], # x90
+            "Hydro Damage"          : [-1 for _ in range(90)], # x90
+            "Hydro Resistance"      : [-1 for _ in range(90)], # x90
+            "Anemo Damage"          : [-1 for _ in range(90)], # x90
+            "Anemo Resistance"      : [-1 for _ in range(90)], # x90
+            "Dendro Damage"         : [-1 for _ in range(90)], # x90
+            "Dendro Resistance"     : [-1 for _ in range(90)], # x90
+            "Electro Damage"        : [-1 for _ in range(90)], # x90
+            "Electro Resistance"    : [-1 for _ in range(90)], # x90
         }
 
         self.attackSpeed = 0
