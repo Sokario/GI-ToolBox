@@ -164,7 +164,7 @@ if __name__ == "__main__" :
             [sGUI.Input(visible = False)],
             [sGUI.Text("Button Grid", background_color = background_color)],
             [sGUI.Column(preview0, visible = True, justification = "center", key = "PREV0"), sGUI.Column(preview1, visible = False, justification = "center", key = "PREV1"), sGUI.Column(preview2, visible = False, justification = "center", key = "PREV2"), sGUI.Column(preview3, visible = False, justification = "center", key = "PREV3")],
-            [sGUI.Text("Voyager M/F", font = ('Arial', 16, 'bold'), background_color = background_color, text_color = text_color, pad = (20, 0, 0, 0), key = "CHARA NAME"), sGUI.Stretch(background_color = background_color), sGUI.Image(data = img_data(resource_path("voyager_party.png"), party_Size), background_color = background_color, key = "PARTY IMAGE")],
+            [sGUI.Text("Voyager", font = ('Arial', 16, 'bold'), background_color = background_color, text_color = text_color, pad = (20, 0, 0, 0), key = "CHARA NAME"), sGUI.Stretch(background_color = background_color), sGUI.Image(data = img_data(resource_path("voyager_party.png"), party_Size), background_color = background_color, key = "PARTY IMAGE")],
             [sGUI.HSeparator(color = "#4A4A4A")],
             [sGUI.Column(tab_layout, justification = "center", key = "TABS")],
             [sGUI.HSeparator(color = "#4A4A4A")],
